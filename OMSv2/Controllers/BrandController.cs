@@ -37,7 +37,7 @@ namespace OMSv2.Service.Controllers
         }
 
         // POST: api/Brand
-        [HttpPost("CreateBrand")]
+        [HttpPost("Create")]
         public ApiResultWithData<RecordResponse> Post(Brand brand)
         {
             var result = new ApiResultWithData<RecordResponse>();
@@ -66,7 +66,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
 
-        [HttpPost("UpdateBrand")]
+        [HttpPost("Update")]
         public Models.ApiResult Update(Brand brand)
         {
             Models.ApiResult result = new Models.ApiResult();
