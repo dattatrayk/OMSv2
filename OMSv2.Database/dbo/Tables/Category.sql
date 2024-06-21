@@ -1,0 +1,12 @@
+﻿CREATE TABLE Category
+(
+    CategoryID INT IDENTITY(1,1) NOT NULL, 
+	CategoryName NVARCHAR(250) NULL,
+    CreatedBy UNIQUEIDENTIFIER NULL,
+    CreatedOn DATETIME NULL,
+    ModifiedBy UNIQUEIDENTIFIER NULL,
+    ModifiedOn DATETIME NULL,
+    [IsDeleted] BIT NULL DEFAULT 0,
+    CONSTRAINT [PK_Category] PRIMARY KEY (CategoryID)
+);
+

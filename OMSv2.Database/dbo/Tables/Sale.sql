@@ -1,0 +1,18 @@
+﻿CREATE TABLE sale
+(
+    SaleID INT IDENTITY(1,1) NOT NULL, 
+	SaleDate DATETIME NULL,
+    CustomerName NVARCHAR(250) NULL,
+    ContactNo NVARCHAR(250) NULL,
+    Email NVARCHAR(250) NULL,
+    Address NVARCHAR(MAX) NULL,
+    TotalAmount DECIMAL(10, 2) NULL,
+    Quantity INT NULL,
+    CreatedBy UNIQUEIDENTIFIER NULL,
+    CreatedOn DATETIME NULL,
+    ModifiedBy UNIQUEIDENTIFIER NULL,
+    ModifiedOn DATETIME NULL,
+    [IsDeleted] BIT NULL DEFAULT 0,
+    CONSTRAINT [PK_sale] PRIMARY KEY (SaleID)
+);
+

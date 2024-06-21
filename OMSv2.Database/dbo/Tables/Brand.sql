@@ -1,0 +1,12 @@
+﻿CREATE TABLE Brand
+(
+    BrandID INT IDENTITY(1,1) NOT NULL, 
+	BrandName NVARCHAR(250) NULL,
+    CreatedBy UNIQUEIDENTIFIER NULL,
+    CreatedOn DATETIME NULL,
+    ModifiedBy UNIQUEIDENTIFIER NULL,
+    ModifiedOn DATETIME NULL,
+    [IsDeleted] BIT NULL DEFAULT 0,
+    CONSTRAINT [PK_Brand] PRIMARY KEY (BrandID)
+);
+

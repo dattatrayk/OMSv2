@@ -1,0 +1,18 @@
+﻿CREATE TABLE Item
+(
+    ItemID INT IDENTITY(1,1) NOT NULL, 
+    [Name] NVARCHAR(250) NULL,
+    [Description] NVARCHAR(MAX) NULL,
+    price DECIMAL(10, 2) NULL,
+    ImgURL NVARCHAR(512) NULL,
+    stock INT NULL,
+    CategoryID INT NULL,
+    BrandID INT NULL,
+    CreatedBy UNIQUEIDENTIFIER NULL,
+    CreatedOn DATETIME NULL,
+    ModifiedBy UNIQUEIDENTIFIER NULL,
+    ModifiedOn DATETIME NULL,
+    [IsDeleted] BIT NULL DEFAULT 0,
+    CONSTRAINT [PK_Item] PRIMARY KEY ([ItemID])
+);
+

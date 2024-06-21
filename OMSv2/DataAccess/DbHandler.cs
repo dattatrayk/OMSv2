@@ -1,0 +1,17 @@
+﻿using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+
+namespace OMSv2.Service
+{
+    public class DbHandler
+    {
+        public static SqlDatabase GetDatabase()
+        {
+            return new SqlDatabase(GetConntionString());
+        }
+        private static string GetConntionString()
+        {
+            return "Data Source=FLEETROOT-DEV\\SQLEXPRESS; Initial Catalog=OMSv2;Integrated Security=True";
+        }
+
+    }
+}

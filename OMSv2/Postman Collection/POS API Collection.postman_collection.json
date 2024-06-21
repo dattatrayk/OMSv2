@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "5f1ad74c-facc-4b76-bb36-ce3d9c57c4fb",
+		"name": "POS API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "569896"
+	},
+	"item": [
+		{
+			"name": "Brand",
+			"item": [
+				{
+					"name": "Get All Brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "232323",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Brand",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Brand"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Brand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"BrandName\": \"New Brand\",\n    \"CreatedName\" : \"Dev\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Brand/CreateBrand",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Brand",
+								"CreateBrand"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Brand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"BrandID\": 2,\n    \"BrandName\": \"New Brand2\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Brand/UpdateBrand",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Brand",
+								"UpdateBrand"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Brand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Brand/DeleteByID?brandID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Brand",
+								"DeleteByID"
+							],
+							"query": [
+								{
+									"key": "brandID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand by ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brandID\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/Brand/GetByID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Brand",
+								"GetByID"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
