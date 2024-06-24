@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OMSv2.Service.Entity
 {
@@ -10,12 +7,17 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Sale
         /// </summary>
-        public int SaleID { get; set; }
+        public Guid SaleID { get; set; }
 
         /// <summary>
         /// record the Date of the Sale.
         /// </summary>
         public DateTime SaleDate { get; set; }
+
+        /// <summary>
+        /// CustomerID
+        /// </summary>
+        public Guid CustomerID { get; set; }
 
         /// <summary>
         /// Name of Customer

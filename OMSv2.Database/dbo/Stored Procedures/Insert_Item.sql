@@ -1,21 +1,21 @@
-﻿CREATE PROCEDURE [dbo].[Insert_Item](	--@ItemID INT,	@Name NVARCHAR(250) ,
+﻿CREATE PROCEDURE [dbo].[Insert_Item](	@ItemID UNIQUEIDENTIFIER,	@Name NVARCHAR(250) ,
     @Description NVARCHAR(MAX) ,
-    @price DECIMAL(10, 2) ,
+    @Price DECIMAL(10, 2) ,
     @ImgURL NVARCHAR(512) ,
-    @stock INT ,
-    @CategoryID INT ,
-    @BrandID INT ,
+    @Stock INT ,
+    @CategoryID UNIQUEIDENTIFIER ,
+    @BrandID UNIQUEIDENTIFIER ,
     @CreatedBy UNIQUEIDENTIFIER 
-    )ASBEGIN       INSERT INTO Item 	   (	   		--ItemID,		Name  ,
+    )ASBEGIN       INSERT INTO Item 	   (	   		ItemID,		Name  ,
 		Description  ,
-		price  ,
+		Price  ,
 		ImgURL ,
-		stock  ,
+		Stock  ,
 		CategoryID  ,
-		BrandID  ,		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    --@ItemID,		@Name  ,
+		BrandID  ,		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    @ItemID,		@Name  ,
 		@Description  ,
-		@price  ,
+		@Price  ,
 		@ImgURL ,
-		@stock  ,
+		@Stock  ,
 		@CategoryID  ,
 		@BrandID  ,       @CreatedBy,	   GETUTCDATE(), 	   @CreatedBy,	   GETUTCDATE()	   )END

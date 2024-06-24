@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Update_Sale](	@SaleID INT , 
+﻿CREATE PROCEDURE [dbo].[Update_Sale](	@SaleID UNIQUEIDENTIFIER , 
 	@SaleDate DATETIME ,
     @CustomerName NVARCHAR(250) ,
     @ContactNo NVARCHAR(250) ,

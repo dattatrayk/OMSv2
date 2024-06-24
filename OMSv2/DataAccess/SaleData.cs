@@ -19,7 +19,7 @@ namespace OMSv2.Service
                     while (dataReader.Read())
                     {
                         var sale = new Sale();
-                        sale.SaleID = SafeParser.ParseInteger(dataReader["SaleID"]);
+                        sale.SaleID = SafeParser.ParseGuid(dataReader["SaleID"]);
                         sale.SaleDate = SafeParser.ParseDate(dataReader["SaleDate"]);
                         sale.CustomerName = SafeParser.ParseString(dataReader["CustomerName"]);
                         sale.ContactNo = SafeParser.ParseString(dataReader["ContactNo"]);
@@ -43,7 +43,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_Sale"))
             {
-                //database.AddInParameter(command, "SaleID", DbType.Int16, sale.SaleID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, sale.SaleID);
                 database.AddInParameter(command, "SaleDate", DbType.DateTime, sale.SaleDate);
                 database.AddInParameter(command, "CustomerName", DbType.String, sale.CustomerName);
                 database.AddInParameter(command, "ContactNo", DbType.String, sale.ContactNo);
@@ -64,7 +64,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Update_Sale"))
             {
-                database.AddInParameter(command, "SaleID", DbType.Int16, sale.SaleID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, sale.SaleID);
                 database.AddInParameter(command, "SaleDate", DbType.DateTime, sale.SaleDate);
                 database.AddInParameter(command, "CustomerName", DbType.String, sale.CustomerName);
                 database.AddInParameter(command, "ContactNo", DbType.String, sale.ContactNo);
@@ -84,7 +84,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_Sale"))
             {
-                database.AddInParameter(command, "SaleID", DbType.Int16, saleID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, saleID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
 
                 int outValue = database.ExecuteNonQuery(command);
@@ -99,7 +99,7 @@ namespace OMSv2.Service
             var sale = new Sale();
             using (var command = database.GetStoredProcCommand("Get_SaleByID"))
             {
-                database.AddInParameter(command, "SaleID", DbType.Int16, saleID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, saleID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     if (dataReader.Read())

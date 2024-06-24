@@ -59,9 +59,9 @@ namespace OMSv2.TestUtility
             //Item item = new Item();
             //item.Name = "NoteBook";
             //item.Description = "NA";
-            //item.price = 90;
+            //item.Price = 90;
             //item.ImgURL = "C: \\Users\\devka\\Downloads\\image(1).jpg";
-            //item.stock = 1100;
+            //item.Stock = 1100;
             //item.CategoryID = 1;
             //item.BrandID = 3;
             //item.CreatedBy = new Guid("2041CE46-B8DF-40E6-8B33-D9EC9472D495");
@@ -72,9 +72,9 @@ namespace OMSv2.TestUtility
             //item.Name = "Book1";
             //item.ItemID = 1;
             //item.Description = "100 pg long book";
-            //item.price = 120;
+            //item.Price = 120;
             //item.ImgURL = "C: \\Users\\devka\\Downloads\\image(1).jpg";
-            //item.stock = 900;
+            //item.Stock = 900;
             //item.CategoryID = 1;
             //item.BrandID = 3;
             //item.ModifiedBy = new Guid("2041CE46-B8DF-40E6-8B33-D9EC9472D495");

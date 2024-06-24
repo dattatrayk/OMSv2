@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -13,21 +9,21 @@ namespace OMSv2.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        // GET: api/Brand
+        // GET: api/Category
         [HttpGet]
-        public ApiResultWithData<List<Brand>> Get()
+        public ApiResultWithData<List<Category>> Get()
         {
-            ApiResultWithData<List<Brand>> result = new ApiResultWithData<List<Brand>>();
+            ApiResultWithData<List<Category>> result = new ApiResultWithData<List<Category>>();
 
             var apiKeyHelper = new ApiKeyHelper();
             var apiKey = Request.Headers["ApiKey"].ToString();
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                result.Data = brandData.GetAll();
+                CategoryData categoryData = new CategoryData();
+                result.Data = categoryData.GetAll();
                 result.Status = ErrorCode.Success;
             }
             else
@@ -36,9 +32,9 @@ namespace OMSv2.Service.Controllers
             return result;
         }
 
-        // POST: api/Brand
+        // POST: api/Category
         [HttpPost("Create")]
-        public ApiResultWithData<RecordResponse> Post(Brand brand)
+        public ApiResultWithData<RecordResponse> Post(Category category)
         {
             var result = new ApiResultWithData<RecordResponse>();
             var apiKeyHelper = new ApiKeyHelper();
@@ -46,10 +42,9 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-
-                BrandData brandData = new BrandData();
-                brand.BrandID = Guid.NewGuid();
-                var OMSResult = brandData.Insert(brand);
+                category.CategoryID = Guid.NewGuid();
+                CategoryData categoryData = new CategoryData();
+                var OMSResult = categoryData.Insert(category);
                 if (OMSResult.IsValid)
                 {
                     result.Status = ErrorCode.Success;
@@ -68,7 +63,7 @@ namespace OMSv2.Service.Controllers
         }
 
         [HttpPost("Update")]
-        public Models.ApiResult Update(Brand brand)
+        public Models.ApiResult Update(Category category)
         {
             Models.ApiResult result = new Models.ApiResult();
 
@@ -77,8 +72,8 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                var OMSResult = brandData.Update(brand);
+                CategoryData categoryData = new CategoryData();
+                var OMSResult = categoryData.Update(category);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
@@ -92,7 +87,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid brandID)
+        public Models.ApiResult Delete(Guid categoryID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -100,8 +95,8 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                var OMSResult = brandData.Delete(brandID, Guid.Empty);
+                CategoryData categoryData = new CategoryData();
+                var OMSResult = categoryData.Delete(categoryID, Guid.Empty);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
@@ -112,17 +107,17 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Brand> GetByID(Guid brandID)
+        public ApiResultWithData<Category> GetByID(Guid categoryID)
         {
             var apiKeyHelper = new ApiKeyHelper();
-            ApiResultWithData<Brand> result = new ApiResultWithData<Brand>();
+            ApiResultWithData<Category> result = new ApiResultWithData<Category>();
             var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
 
-                BrandData brandData = new BrandData();
-                var data = brandData.GetByID(brandID);
+                CategoryData categoryData = new CategoryData();
+                var data = categoryData.GetByID(categoryID);
                 result.Data = data;
                 result.Status = ErrorCode.Success;
 

@@ -52,5 +52,8 @@ namespace OMSv2.Service.Entity
         InvalidOrEmptyID = 2,
         [Display(Name = "Something Went Wrong")]
         SomethingWentWrong = 201,
+
+        [Display(Name = "Mandatory field is missing.")]
+        MandatoryFieldMissing
     }
 }

@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Insert_Sale](	--@SaleID INT , 
+﻿CREATE PROCEDURE [dbo].[Insert_Sale](	@SaleID UNIQUEIDENTIFIER , 
 	@SaleDate DATETIME ,
+    @CustomerID UNIQUEIDENTIFIER,
     @CustomerName NVARCHAR(250) ,
     @ContactNo NVARCHAR(250) ,
     @Email NVARCHAR(250) ,
@@ -7,15 +8,17 @@
     @TotalAmount DECIMAL(10, 2) ,
     @Quantity INT ,
     @CreatedBy UNIQUEIDENTIFIER 
-    )ASBEGIN       INSERT INTO Sale 	   (	   		--SaleID  , 
+    )ASBEGIN       INSERT INTO Sale 	   (	   		SaleID  , 
 		SaleDate,
+		CustomerID ,
 		CustomerName ,
 		ContactNo  ,
 		Email  ,
 		Address  ,
 		TotalAmount  ,
-		Quantity  ,		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    --@SaleID  , 
+		Quantity  ,		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    @SaleID  , 
 		@SaleDate,
+		@CustomerID,
 		@CustomerName ,
 		@ContactNo  ,
 		@Email  ,

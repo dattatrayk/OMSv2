@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Get_SaleByID]
-@SaleID INT
+@SaleID UNIQUEIDENTIFIER
 AS
 BEGIN
       SELECT 		

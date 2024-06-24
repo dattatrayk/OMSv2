@@ -1,14 +1,18 @@
 ﻿CREATE PROCEDURE [dbo].[Get_ItemByID]
-@ItemID INT
+@ItemID UNIQUEIDENTIFIER
 AS
 BEGIN
-      SELECT 		i.Name  ,
-		i.Description  ,
-		i.price  ,
-		i.ImgURL ,
-		i.stock  ,
-		i.CategoryID  ,
-		i.BrandID  ,		i.CreatedBy,		i.CreatedOn,
+      SELECT 
+		i.ItemID,
+		i.Name,
+		i.Description,
+		i.Price,
+		i.ImgURL,
+		i.Stock,
+		i.CategoryID,
+		i.BrandID,
+		i.CreatedBy,
+		i.CreatedOn,
 		 B.BrandName as BrandName,
 		 C.CategoryName as CategoryName
 	  FROM

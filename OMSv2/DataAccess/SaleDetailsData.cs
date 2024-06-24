@@ -19,9 +19,9 @@ namespace OMSv2.Service
                     while (dataReader.Read())
                     {
                         var saleDetails = new SaleDetails();
-                        saleDetails.SaleDetailsID = SafeParser.ParseInteger(dataReader["SaleDetailsID"]);
-                        saleDetails.SaleID = SafeParser.ParseInteger(dataReader["SaleID"]);
-                        saleDetails.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
+                        saleDetails.SaleDetailID = SafeParser.ParseGuid(dataReader["SaleDetailID"]);
+                        saleDetails.SaleID = SafeParser.ParseGuid(dataReader["SaleID"]);
+                        saleDetails.ItemID = SafeParser.ParseGuid(dataReader["ItemID"]);
                         saleDetails.Price = SafeParser.ParseDouble(dataReader["Price"]);
                         saleDetails.Quantity = SafeParser.ParseInteger(dataReader["Quantity"]);
                         saleDetails.CreatedBy = SafeParser.ParseGuid(dataReader["CreatedBy"]);
@@ -42,9 +42,9 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_SaleDetails"))
             {
-                //database.AddInParameter(command, "SaleDetailsID", DbType.Int16, saleDetails.SaleDetailsID);
-                database.AddInParameter(command, "SaleID", DbType.Int16, saleDetails.SaleID);
-                database.AddInParameter(command, "ItemID", DbType.Int16, saleDetails.ItemID);
+                database.AddInParameter(command, "SaleDetailID", DbType.Guid, saleDetails.SaleDetailID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, saleDetails.SaleID);
+                database.AddInParameter(command, "ItemID", DbType.Guid, saleDetails.ItemID);
                 database.AddInParameter(command, "Price", DbType.Double, saleDetails.Price);
                 database.AddInParameter(command, "Quantity", DbType.Int16, saleDetails.Quantity);
                 database.AddInParameter(command, "CreatedBy", DbType.Guid, saleDetails.CreatedBy);
@@ -60,9 +60,9 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Update_SaleDetails"))
             {
-                database.AddInParameter(command, "SaleDetailsID", DbType.Int16, saleDetails.SaleDetailsID);
-                database.AddInParameter(command, "SaleID", DbType.Int16, saleDetails.SaleID);
-                database.AddInParameter(command, "ItemID", DbType.Int16, saleDetails.ItemID);
+                database.AddInParameter(command, "SaleDetailID", DbType.Guid, saleDetails.SaleDetailID);
+                database.AddInParameter(command, "SaleID", DbType.Guid, saleDetails.SaleID);
+                database.AddInParameter(command, "ItemID", DbType.Guid, saleDetails.ItemID);
                 database.AddInParameter(command, "Price", DbType.Double, saleDetails.Price);
                 database.AddInParameter(command, "Quantity", DbType.Int16, saleDetails.Quantity);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, saleDetails.ModifiedBy);
@@ -77,7 +77,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_SaleDetails"))
             {
-                database.AddInParameter(command, "SaleDetailsID", DbType.Int16, saleDetailsID);
+                database.AddInParameter(command, "SaleDetailID", DbType.Int16, saleDetailsID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
 
                 int outValue = database.ExecuteNonQuery(command);
@@ -92,14 +92,14 @@ namespace OMSv2.Service
             var saleDetails = new SaleDetails();
             using (var command = database.GetStoredProcCommand("Get_SaleDetailsByID"))
             {
-                database.AddInParameter(command, "SaleDetailsID", DbType.Int16, saleDetailsID);
+                database.AddInParameter(command, "SaleDetailID", DbType.Int16, saleDetailsID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     if (dataReader.Read())
                     {
-                        saleDetails.SaleDetailsID = SafeParser.ParseInteger(dataReader["SaleDetailsID"]);
-                        saleDetails.SaleID = SafeParser.ParseInteger(dataReader["SaleID"]);
-                        saleDetails.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
+                        saleDetails.SaleDetailID = SafeParser.ParseGuid(dataReader["SaleDetailID"]);
+                        saleDetails.SaleID = SafeParser.ParseGuid(dataReader["SaleID"]);
+                        saleDetails.ItemID = SafeParser.ParseGuid(dataReader["ItemID"]);
                         saleDetails.Price = SafeParser.ParseDouble(dataReader["Price"]);
                         saleDetails.Quantity = SafeParser.ParseInteger(dataReader["Quantity"]);
                         saleDetails.CreatedBy = SafeParser.ParseGuid(dataReader["CreatedBy"]);

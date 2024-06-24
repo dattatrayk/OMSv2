@@ -2,16 +2,17 @@
 AS
 BEGIN
       SELECT 
-	     sd.SaleDetailsID , 
+	     sd.SaleDetailID , 
 		sd.SaleID , 
 		sd.ItemID , 
-		sd.Price,		sd.Quantity ,
+		sd.Price,
+		sd.Quantity ,
 		sd.CreatedBy,
 		sd.CreatedOn,
         S.CustomerName AS SaleName,
 		i.Name as ItemName
 	  FROM SaleDetails sd
-	   left outer join sale S on S.SaleID = sd.SaleID
+	   left outer join Sale S on S.SaleID = sd.SaleID
 	  left outer join Item i on i.ItemID = sd.ItemID
 	  WHERE 
 	  sd.IsDeleted != 1

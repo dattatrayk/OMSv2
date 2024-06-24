@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[Get_CategoryByID]
-@CategoryID INT
+@CategoryID UNIQUEIDENTIFIER
 AS
 BEGIN
-      SELECT 		CategoryName  ,		CreatedBy,		CreatedOn
+      SELECT 		CategoryID  ,		CategoryName  ,		CreatedBy,		CreatedOn
 	  FROM
 	     Category
 	  WHERE CategoryID=@CategoryID

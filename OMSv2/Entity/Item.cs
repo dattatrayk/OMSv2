@@ -7,7 +7,7 @@ namespace OMSv2.Service
         /// <summary>
         /// unique identififier of Item
         /// </summary>
-        public int ItemID { get; set; }
+        public Guid ItemID { get; set; }
 
         /// <summary>
         /// Name of Item
@@ -20,29 +20,29 @@ namespace OMSv2.Service
         public string Description { get; set; }
 
         /// <summary>
-        /// price of item
+        /// Price of item
         /// </summary>
-        public double price { get; set; }
+        public double Price { get; set; }
 
         /// <summary>
         /// ImgURL of item
         /// </summary>
-        public String ImgURL { get; set; }
+        public string ImgURL { get; set; }
 
         /// <summary>
-        /// stock of item
+        /// Stock of item
         /// </summary>
-        public int stock { get; set; }
+        public int Stock { get; set; }
 
         /// <summary>
         /// CategoryID of item
         /// </summary>
-        public int CategoryID { get; set; }
+        public Guid CategoryID { get; set; }
 
         /// <summary>
         /// BrandID of item
         /// </summary>
-        public int BrandID { get; set; }
+        public Guid BrandID { get; set; }
 
         /// <summary>
         /// CreatedName of item

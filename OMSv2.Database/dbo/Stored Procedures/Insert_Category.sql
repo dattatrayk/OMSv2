@@ -1,6 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Insert_Category](	--@CategoryID INT , 
-	@CategoryName NVARCHAR(250) ,
+﻿CREATE PROCEDURE [dbo].[Insert_Category](	@CategoryID UNIQUEIDENTIFIER,	@CategoryName NVARCHAR(250) ,
     @CreatedBy UNIQUEIDENTIFIER 
-    )ASBEGIN       INSERT INTO Category 	   (	   		CategoryName ,
-		--CategoryID  ,		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    @CategoryName ,
-		--@CategoryID  ,       @CreatedBy,	   GETUTCDATE(), 	   @CreatedBy,	   GETUTCDATE()	   )END
+)ASBEGIN       INSERT INTO Category 	   (	   CategoryID,		CategoryName ,
+		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   @CategoryID,	    @CategoryName ,
+       @CreatedBy,	   GETUTCDATE(), 	   @CreatedBy,	   GETUTCDATE()	   )END

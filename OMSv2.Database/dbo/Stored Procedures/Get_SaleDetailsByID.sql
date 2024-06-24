@@ -1,9 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[Get_SaleDetailsByID]
-@SaleDetailsID INT
+@SaleDetailID UNIQUEIDENTIFIER
 AS
 BEGIN
       SELECT 		
-		sd.SaleDetailsID , 
+		sd.SaleDetailID , 
 		sd.SaleID , 
 		sd.ItemID , 
 		sd.Price,
@@ -12,7 +12,7 @@ BEGIN
 		i.Name as ItemName
 	  FROM
 	     SaleDetails sd
-	  left outer join sale S on S.SaleID = sd.SaleID
+	  left outer join Sale S on S.SaleID = sd.SaleID
 	  left outer join Item i on i.ItemID = sd.ItemID
-	  WHERE sd.SaleDetailsID=@SaleDetailsID
+	  WHERE sd.SaleDetailID=@SaleDetailID
 END

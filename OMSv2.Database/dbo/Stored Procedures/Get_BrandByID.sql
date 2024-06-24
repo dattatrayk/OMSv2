@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[Get_BrandByID]
-@BrandID INT
+@BrandID UNIQUEIDENTIFIER
 AS
 BEGIN
-      SELECT 		BrandName,  		CreatedBy,		CreatedOn
+      SELECT 		BrandID,  		BrandName,  		CreatedBy,		CreatedOn
 	  FROM
 	     Brand
 	  WHERE BrandID=@BrandID

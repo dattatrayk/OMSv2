@@ -20,8 +20,7 @@ namespace OMSv2.Service
                     {
                         var brand = new Brand();
                         brand.BrandName = SafeParser.ParseString(dataReader["BrandName"]);
-                        brand.BrandID = SafeParser.ParseInteger(dataReader["BrandID"]);
-                        //brand.CreatedName = SafeParser.ParseString(dataReader["CreatedName"]);
+                        brand.BrandID = SafeParser.ParseGuid(dataReader["BrandID"]);
                         brand.CreatedOn = SafeParser.ParseDate(dataReader["CreatedOn"]);
 
                         brandList.Add(brand);
@@ -37,12 +36,12 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_Brand"))
             {
-                //database.AddInParameter(command, "BrandID ", DbType.Int16, brand.BrandID);
+                database.AddInParameter(command, "BrandID ", DbType.Guid, brand.BrandID);
                 database.AddInParameter(command, "BrandName", DbType.String, brand.BrandName);
                 database.AddInParameter(command, "CreatedBy", DbType.Guid, brand.CreatedBy);
                 int outValue = database.ExecuteNonQuery(command);
                 if (outValue > 0)
-                    return new Result() { IsValid = true };
+                    return new Result() { IsValid = true, ID = brand.BrandID };
                 return new Result();
             }
         }
@@ -52,7 +51,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Update_Brand"))
             {
-                database.AddInParameter(command, "BrandID ", DbType.Int16, brand.BrandID);
+                database.AddInParameter(command, "BrandID ", DbType.Guid, brand.BrandID);
                 database.AddInParameter(command, "BrandName", DbType.String, brand.BrandName);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, brand.ModifiedBy);
                 int outValue = database.ExecuteNonQuery(command);
@@ -61,12 +60,12 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Result Delete(int brandID, Guid modifiedBy)
+        public Result Delete(Guid brandID, Guid modifiedBy)
         {
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_Brand"))
             {
-                database.AddInParameter(command, "BrandID", DbType.Int16, brandID);
+                database.AddInParameter(command, "BrandID", DbType.Guid, brandID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
 
                 int outValue = database.ExecuteNonQuery(command);
@@ -75,18 +74,19 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Brand GetByID(int brandID)
+        public Brand GetByID(Guid brandID)
         {
             var database = DbHandler.GetDatabase();
             var brand = new Brand();
             using (var command = database.GetStoredProcCommand("Get_BrandByID"))
             {
-                database.AddInParameter(command, "BrandID", DbType.Int32, brandID);
+                database.AddInParameter(command, "BrandID", DbType.Guid, brandID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     if (dataReader.Read())
                     {
-                        
+
+                        brand.BrandID = SafeParser.ParseGuid(dataReader["BrandID"]);
                         brand.BrandName = SafeParser.ParseString(dataReader["BrandName"]);
                         brand.CreatedBy = SafeParser.ParseGuid(dataReader["CreatedBy"]);
                         brand.CreatedOn = SafeParser.ParseDate(dataReader["CreatedOn"]);
@@ -97,7 +97,7 @@ namespace OMSv2.Service
             }
         }
 
-        
+
     }
 }
 

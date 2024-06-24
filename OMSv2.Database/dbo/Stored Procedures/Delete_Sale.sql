@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_Sale]
-@SaleID INT,
+@SaleID UNIQUEIDENTIFIER,
 @ModifiedBy	    UNIQUEIDENTIFIER
 AS
 BEGIN

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OMSv2.Service.Entity
 {
@@ -10,7 +7,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Category
         /// </summary>
-        public int CategoryID { get; set; }
+        public Guid CategoryID { get; set; }
 
         /// <summary>
         /// Name of Category

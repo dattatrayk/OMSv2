@@ -1,7 +1,8 @@
-﻿CREATE TABLE sale
+﻿CREATE TABLE Sale
 (
-    SaleID INT IDENTITY(1,1) NOT NULL, 
+    SaleID UNIQUEIDENTIFIER NOT NULL, 
 	SaleDate DATETIME NULL,
+    [CustomerID] UNIQUEIDENTIFIER NULL,
     CustomerName NVARCHAR(250) NULL,
     ContactNo NVARCHAR(250) NULL,
     Email NVARCHAR(250) NULL,
@@ -12,7 +13,7 @@
     CreatedOn DATETIME NULL,
     ModifiedBy UNIQUEIDENTIFIER NULL,
     ModifiedOn DATETIME NULL,
-    [IsDeleted] BIT NULL DEFAULT 0,
-    CONSTRAINT [PK_sale] PRIMARY KEY (SaleID)
+    [IsDeleted] BIT NULL DEFAULT 0, 
+    CONSTRAINT [PK_sale] PRIMARY KEY ([SaleID])
 );
 
