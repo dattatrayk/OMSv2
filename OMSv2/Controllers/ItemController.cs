@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -23,7 +24,16 @@ namespace OMSv2.Service.Controllers
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
                 ItemData itemData = new ItemData();
-                result.Data = itemData.GetAll(parameter);
+                var items = itemData.GetAll(parameter);
+                if (parameter.MinPrice != 0)
+                    items = items.Where(x => x.Price >= parameter.MinPrice).ToList();
+                if (parameter.MaxPrice != 0)
+                    items = items.Where(x => x.Price <= parameter.MaxPrice).ToList();
+                if (parameter.IsInStock)
+                    items = items.Where(x => x.Stock > 0).ToList();
+                if (!parameter.IsInStock)
+                    items = items.Where(x => x.Stock <= 0).ToList();
+                result.Data = items;
                 result.Status = ErrorCode.Success;
             }
             else
@@ -42,13 +52,16 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
+
                 ItemData itemData = new ItemData();
                 var omsResult = new Result();
                 foreach (var item in items)
                 {
-                    item.ItemID = Guid.NewGuid();
-                    omsResult = itemData.Insert(item);
-
+                    result = ValidateItem(item);
+                    if (result.Status == ErrorCode.Success)
+                    {
+                        omsResult = itemData.Insert(item);
+                    }
                 }
 
                 if (omsResult.IsValid)
@@ -78,12 +91,16 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                ItemData itemData = new ItemData();
-                var OMSResult = itemData.Update(item);
-                if (OMSResult.IsValid)
-                    result.Status = ErrorCode.Success;
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
+                result = ValidateItem(item, true);
+                if (result.Status == ErrorCode.Success)
+                {
+                    ItemData itemData = new ItemData();
+                    var OMSResult = itemData.Update(item);
+                    if (OMSResult.IsValid)
+                        result.Status = ErrorCode.Success;
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
+                }
 
             }
             else
@@ -93,7 +110,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid itemID)
+        public Models.ApiResult Delete(int itemID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -113,7 +130,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Item> GetByID(Guid itemID)
+        public ApiResultWithData<Item> GetByID(int itemID)
         {
             var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Item> result = new ApiResultWithData<Item>();
@@ -132,6 +149,17 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
+        }
+        private ApiResultWithData<RecordResponse> ValidateItem(Item item, bool isUpdate = false)
+        {
+            // Validate basic required information is provided.
+            if (string.IsNullOrEmpty(item.Name))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (Utility.IsInvalidGuid(item.ClientID) && !isUpdate)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (isUpdate && item.ItemID == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            return new ApiResultWithData<RecordResponse> { Status = ErrorCode.Success };
         }
     }
 }

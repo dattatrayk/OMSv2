@@ -8,7 +8,7 @@ namespace OMSv2.Service
         /// <summary>
         /// unique identififier of Item
         /// </summary>
-        public Guid ItemID { get; set; }
+        public int ItemID { get; set; }
 
         /// <summary>
         /// Name of Item
@@ -38,12 +38,12 @@ namespace OMSv2.Service
         /// <summary>
         /// CategoryID of item
         /// </summary>
-        public Guid CategoryID { get; set; }
+        public int CategoryID { get; set; }
 
         /// <summary>
         /// BrandID of item
         /// </summary>
-        public Guid BrandID { get; set; }
+        public int BrandID { get; set; }
 
         public string BrandName { get; set; }
 
@@ -52,8 +52,8 @@ namespace OMSv2.Service
     public class ItemFilterParameter
     {
         public Guid ClientID { get; set; }
-        public Guid BrandID { get; set; }
-        public Guid CategoryID { get; set; }
+        public int BrandID { get; set; }
+        public int CategoryID { get; set; }
         public double MinPrice { get; set; }
         public double MaxPrice { get; set; }
         public bool IsInStock { get; set; }

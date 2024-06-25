@@ -7,7 +7,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Category
         /// </summary>
-        public Guid CategoryID { get; set; }
+        public int CategoryID { get; set; }
 
         /// <summary>
         /// Name of Category

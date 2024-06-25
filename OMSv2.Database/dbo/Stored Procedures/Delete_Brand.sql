@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_Brand]
-@BrandID UNIQUEIDENTIFIER,
+@BrandID int,
 @ModifiedBy	    UNIQUEIDENTIFIER
 AS
 BEGIN

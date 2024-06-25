@@ -15,22 +15,22 @@ namespace OMSv2.Service
             using (var command = database.GetStoredProcCommand("Select_Item"))
             {
                 database.AddInParameter(command, "ClientID", DbType.Guid, parameter.ClientID);
-                database.AddInParameter(command, "BrandID", DbType.Guid, parameter.BrandID);
-                database.AddInParameter(command, "CategoryID", DbType.Guid, parameter.CategoryID);
+                database.AddInParameter(command, "BrandID", DbType.Int32, parameter.BrandID);
+                database.AddInParameter(command, "CategoryID", DbType.Int32, parameter.CategoryID);
 
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     while (dataReader.Read())
                     {
                         var item = new Item();
-                        item.ItemID = SafeParser.ParseGuid(dataReader["ItemID"]);
+                        item.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
                         item.Name = SafeParser.ParseString(dataReader["Name"]);
                         item.Description = SafeParser.ParseString(dataReader["Description"]);
                         item.Price = SafeParser.ParseDouble(dataReader["Price"]);
                         item.ImgURL = SafeParser.ParseString(dataReader["ImgURL"]);
                         item.Stock = SafeParser.ParseInteger(dataReader["Stock"]);
-                        item.CategoryID = SafeParser.ParseGuid(dataReader["CategoryID"]);
-                        item.BrandID = SafeParser.ParseGuid(dataReader["BrandID"]);
+                        item.CategoryID = SafeParser.ParseInteger(dataReader["CategoryID"]);
+                        item.BrandID = SafeParser.ParseInteger(dataReader["BrandID"]);
                         //item.CreatedName = SafeParser.ParseString(dataReader["CreatedName"]);
                         item.BrandName = SafeParser.ParseString(dataReader["BrandName"]);
                         item.CategoryName = SafeParser.ParseString(dataReader["CategoryName"]);
@@ -48,15 +48,15 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_Item"))
             {
-                database.AddInParameter(command, "ItemID", DbType.Guid, item.ItemID);
+                //database.AddInParameter(command, "ItemID", DbType.Guid, item.ItemID);
                 database.AddInParameter(command, "ClientID", DbType.Guid, item.ClientID);
                 database.AddInParameter(command, "Name", DbType.String, item.Name);
                 database.AddInParameter(command, "Description", DbType.String, item.Description);
                 database.AddInParameter(command, "Price", DbType.Double, item.Price);
                 database.AddInParameter(command, "ImgURL", DbType.String, item.ImgURL);
                 database.AddInParameter(command, "Stock", DbType.Int16, item.Stock);
-                database.AddInParameter(command, "CategoryID", DbType.Guid, item.CategoryID);
-                database.AddInParameter(command, "BrandID", DbType.Guid, item.BrandID);
+                database.AddInParameter(command, "CategoryID", DbType.Int32, item.CategoryID);
+                database.AddInParameter(command, "BrandID", DbType.Int32, item.BrandID);
                 database.AddInParameter(command, "CreatedBy", DbType.Guid, item.CreatedBy);
                 int outValue = database.ExecuteNonQuery(command);
                 if (outValue > 0)
@@ -70,14 +70,14 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Update_Item"))
             {
-                database.AddInParameter(command, "ItemID", DbType.Guid, item.ItemID);
+                database.AddInParameter(command, "ItemID", DbType.Int32, item.ItemID);
                 database.AddInParameter(command, "Name", DbType.String, item.Name);
                 database.AddInParameter(command, "Description", DbType.String, item.Description);
                 database.AddInParameter(command, "Price", DbType.Double, item.Price);
                 database.AddInParameter(command, "ImgURL", DbType.String, item.ImgURL);
                 database.AddInParameter(command, "Stock", DbType.Int16, item.Stock);
-                database.AddInParameter(command, "CategoryID", DbType.Guid, item.CategoryID);
-                database.AddInParameter(command, "BrandID", DbType.Guid, item.BrandID);
+                database.AddInParameter(command, "CategoryID", DbType.Int32, item.CategoryID);
+                database.AddInParameter(command, "BrandID", DbType.Int32, item.BrandID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, item.ModifiedBy);
                 int outValue = database.ExecuteNonQuery(command);
                 if (outValue > 0)
@@ -85,12 +85,12 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Result Delete(Guid itemID, Guid modifiedBy)
+        public Result Delete(int itemID, Guid modifiedBy)
         {
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_Item"))
             {
-                database.AddInParameter(command, "ItemID", DbType.Guid, itemID);
+                database.AddInParameter(command, "ItemID", DbType.Int32, itemID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
 
                 int outValue = database.ExecuteNonQuery(command);
@@ -99,24 +99,25 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Item GetByID(Guid itemID)
+        public Item GetByID(int itemID)
         {
             var database = DbHandler.GetDatabase();
             var item = new Item();
             using (var command = database.GetStoredProcCommand("Get_ItemByID"))
             {
-                database.AddInParameter(command, "ItemID", DbType.Guid, itemID);
+                database.AddInParameter(command, "ItemID", DbType.Int32, itemID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     if (dataReader.Read())
                     {
+                        item.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
                         item.Name = SafeParser.ParseString(dataReader["Name"]);
                         item.Description = SafeParser.ParseString(dataReader["Description"]);
                         item.Price = SafeParser.ParseDouble(dataReader["Price"]);
                         item.ImgURL = SafeParser.ParseString(dataReader["ImgURL"]);
                         item.Stock = SafeParser.ParseInteger(dataReader["Stock"]);
-                        item.CategoryID = SafeParser.ParseGuid(dataReader["CategoryID"]);
-                        item.BrandID = SafeParser.ParseGuid(dataReader["BrandID"]);
+                        item.CategoryID = SafeParser.ParseInteger(dataReader["CategoryID"]);
+                        item.BrandID = SafeParser.ParseInteger(dataReader["BrandID"]);
                         item.CreatedBy = SafeParser.ParseGuid(dataReader["CreatedBy"]);
                         item.CreatedOn = SafeParser.ParseDate(dataReader["CreatedOn"]);
                         item.BrandName = SafeParser.ParseString(dataReader["BrandName"]);

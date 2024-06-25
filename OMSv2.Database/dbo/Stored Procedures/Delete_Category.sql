@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_Category]
-@CategoryID UNIQUEIDENTIFIER,
+@CategoryID int,
 @ModifiedBy	    UNIQUEIDENTIFIER
 AS
 BEGIN

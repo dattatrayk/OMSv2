@@ -1,20 +1,41 @@
-﻿CREATE PROCEDURE [dbo].[Insert_Customer](	@CustomerID UNIQUEIDENTIFIER ,
+﻿CREATE PROCEDURE [dbo].[Insert_Customer]
+(
+	--@CustomerID int ,
 	@ClientID UNIQUEIDENTIFIER , 
     @Name NVARCHAR(250) ,
     @ContactNo NVARCHAR(250) ,
     @Email NVARCHAR(250) ,
     @AddressDetails NVARCHAR(MAX) ,
     @CreatedBy UNIQUEIDENTIFIER 
-)ASBEGIN       INSERT INTO Customer 	   (		CustomerID  , 
+)
+
+AS
+BEGIN
+       INSERT INTO Customer 
+	   (
+		--CustomerID  , 
 		ClientID,
 		Name ,
 		ContactNo  ,
 		Email  ,
 		AddressDetails  ,
-		CreatedBy,		CreatedOn,		ModifiedBy,		ModifiedOn	   )       VALUES 	   (	   	    @CustomerID  , 
+		CreatedBy,
+		CreatedOn,
+		ModifiedBy,
+		ModifiedOn
+	   )
+       VALUES 
+	   (
+	   
+	    --@CustomerID  , 
 		@ClientID,
 		@Name ,
 		@ContactNo  ,
 		@Email  ,
 		@AddressDetails  ,
-       @CreatedBy,	   GETUTCDATE(), 	   @CreatedBy,	   GETUTCDATE()	   )END
+       @CreatedBy,
+	   GETUTCDATE(), 
+	   @CreatedBy,
+	   GETUTCDATE()
+	   )
+END

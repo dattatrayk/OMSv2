@@ -7,7 +7,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Brand
         /// </summary>
-        public Guid BrandID { get; set; }
+        public int BrandID { get; set; }
 
         /// <summary>
         /// Name of Brand

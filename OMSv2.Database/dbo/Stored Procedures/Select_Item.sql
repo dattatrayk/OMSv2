@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[Select_Item]
 (
 @ClientID UNIQUEIDENTIFIER,
-@BrandID UNIQUEIDENTIFIER,
-@CategoryID UNIQUEIDENTIFIER
+@BrandID int,
+@CategoryID int
 )
 AS
 BEGIN
@@ -25,8 +25,8 @@ BEGIN
 	  left outer join Category C on C.CategoryID = i.CategoryID
 	  WHERE 
 	  i.IsDeleted != 1
-	  AND (@ClientID IS NULL OR @ClientID = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER) OR i.ClientID = @ClientID)
-	  AND (@BrandID IS NULL OR @BrandID = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER) OR i.BrandID = @BrandID)
-	  AND (@CategoryID IS NULL OR @CategoryID = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER) OR i.CategoryID = @CategoryID)
+	  AND (i.ClientID = @ClientID)
+	  AND (@BrandID IS NULL OR @BrandID = 0 OR i.BrandID = @BrandID)
+	  AND (@CategoryID IS NULL OR @CategoryID = 0 OR i.CategoryID = @CategoryID)
     Order By i.CreatedOn desc
 END

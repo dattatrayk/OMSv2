@@ -42,19 +42,22 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                CustomerData customerData = new CustomerData();
-                var omsResult = new Result();
-
-                customer.CustomerID = Guid.NewGuid();
-                omsResult = customerData.Insert(customer);
-
-                if (omsResult.IsValid)
+                result = ValidateCustomer(customer);
+                if (result.Status == ErrorCode.Success)
                 {
-                    result.Status = ErrorCode.Success;
-                    result.Data = new RecordResponse { Id = customer.CustomerID };
+                    CustomerData customerData = new CustomerData();
+                    var omsResult = new Result();
+
+                    omsResult = customerData.Insert(customer);
+
+                    if (omsResult.IsValid)
+                    {
+                        result.Status = ErrorCode.Success;
+                        result.Data = new RecordResponse { Id = customer.CustomerID };
+                    }
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
                 }
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
             }
 
 
@@ -75,12 +78,16 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                CustomerData customerData = new CustomerData();
-                var OMSResult = customerData.Update(customer);
-                if (OMSResult.IsValid)
-                    result.Status = ErrorCode.Success;
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
+                result = ValidateCustomer(customer, true);
+                if (result.Status == ErrorCode.Success)
+                {
+                    CustomerData customerData = new CustomerData();
+                    var OMSResult = customerData.Update(customer);
+                    if (OMSResult.IsValid)
+                        result.Status = ErrorCode.Success;
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
+                }
 
             }
             else
@@ -90,7 +97,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid customerID)
+        public Models.ApiResult Delete(int customerID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -110,7 +117,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Customer> GetByID(Guid customerID)
+        public ApiResultWithData<Customer> GetByID(int customerID)
         {
             var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Customer> result = new ApiResultWithData<Customer>();
@@ -129,6 +136,19 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
+        }
+        private ApiResultWithData<RecordResponse> ValidateCustomer(Customer customer, bool isUpdate = false)
+        {
+            // Validate basic required information is provided.
+            if (string.IsNullOrEmpty(customer.Name))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (string.IsNullOrEmpty(customer.ContactNo))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (Utility.IsInvalidGuid(customer.ClientID) && !isUpdate)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (isUpdate && customer.CustomerID == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            return new ApiResultWithData<RecordResponse> { Status = ErrorCode.Success };
         }
     }
 }

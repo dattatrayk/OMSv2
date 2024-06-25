@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Get_BrandByID]
-@BrandID UNIQUEIDENTIFIER
+@BrandID int
 AS
 BEGIN
       SELECT 

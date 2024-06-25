@@ -21,7 +21,7 @@ namespace OMSv2.Service
                     while (dataReader.Read())
                     {
                         var customer = new Customer();
-                        customer.CustomerID = SafeParser.ParseGuid(dataReader["CustomerID"]);
+                        customer.CustomerID = SafeParser.ParseInteger(dataReader["CustomerID"]);
                         customer.Name = SafeParser.ParseString(dataReader["Name"]);
                         customer.ContactNo = SafeParser.ParseString(dataReader["ContactNo"]);
                         customer.Email = SafeParser.ParseString(dataReader["Email"]);
@@ -42,7 +42,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_Customer"))
             {
-                database.AddInParameter(command, "CustomerID", DbType.Guid, customer.CustomerID);
+                //database.AddInParameter(command, "CustomerID", DbType.Int32, customer.CustomerID);
                 database.AddInParameter(command, "ClientID", DbType.Guid, customer.ClientID);
                 database.AddInParameter(command, "Name", DbType.String, customer.Name);
                 database.AddInParameter(command, "ContactNo", DbType.String, customer.ContactNo);
@@ -61,7 +61,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Update_Customer"))
             {
-                database.AddInParameter(command, "CustomerID", DbType.Guid, customer.CustomerID);
+                database.AddInParameter(command, "CustomerID", DbType.Int32, customer.CustomerID);
                 database.AddInParameter(command, "Name", DbType.String, customer.Name);
                 database.AddInParameter(command, "ContactNo", DbType.String, customer.ContactNo);
                 database.AddInParameter(command, "Email", DbType.String, customer.Email);
@@ -73,12 +73,12 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Result Delete(Guid customerID, Guid modifiedBy)
+        public Result Delete(int customerID, Guid modifiedBy)
         {
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_Customer"))
             {
-                database.AddInParameter(command, "CustomerID", DbType.Guid, customerID);
+                database.AddInParameter(command, "CustomerID", DbType.Int32, customerID);
                 database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
 
                 int outValue = database.ExecuteNonQuery(command);
@@ -87,13 +87,13 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Customer GetByID(Guid customerID)
+        public Customer GetByID(int customerID)
         {
             var database = DbHandler.GetDatabase();
             var customer = new Customer();
             using (var command = database.GetStoredProcCommand("Get_CustomerByID"))
             {
-                database.AddInParameter(command, "CustomerID", DbType.Guid, customerID);
+                database.AddInParameter(command, "CustomerID", DbType.Int32, customerID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     if (dataReader.Read())

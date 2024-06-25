@@ -42,33 +42,34 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                SaleData saleData = new SaleData();
-                var omsResult = new Result();
-
-                sale.SaleID = Guid.NewGuid();
-                omsResult = saleData.Insert(sale);
-
-                if (omsResult.IsValid)
+                result = ValidateSale(sale);
+                if (result.Status == ErrorCode.Success)
                 {
+                    SaleData saleData = new SaleData();
+                    var omsResult = new Result();
+                    omsResult = saleData.Insert(sale);
 
-                    if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
+                    if (omsResult.IsValid)
                     {
-                        SaleDetailsData saleDetailsData = new SaleDetailsData();
-
-                        foreach (var item in sale.SaleDetail)
+                        if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
                         {
-                            item.SaleID = sale.SaleID;
-                            omsResult = saleDetailsData.Insert(item);
+                            SaleDetailsData saleDetailsData = new SaleDetailsData();
+
+                            foreach (var item in sale.SaleDetail)
+                            {
+                                item.SaleID = omsResult.ID;
+                                 saleDetailsData.Insert(item);
+                            }
                         }
                     }
+                    if (omsResult.IsValid)
+                    {
+                        result.Status = ErrorCode.Success;
+                        result.Data = new RecordResponse { Id = sale.SaleID };
+                    }
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
                 }
-                if (omsResult.IsValid)
-                {
-                    result.Status = ErrorCode.Success;
-                    result.Data = new RecordResponse { Id = sale.SaleID };
-                }
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
             }
             else
                 result.Status = apiKeyHelper.ErrorCode;
@@ -86,25 +87,29 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                SaleData saleData = new SaleData();
-                var OMSResult = saleData.Update(sale);
-                if (OMSResult.IsValid)
+                result = ValidateSale(sale, true);
+                if (result.Status == ErrorCode.Success)
                 {
-                    if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
+                    SaleData saleData = new SaleData();
+                    var OMSResult = saleData.Update(sale);
+                    if (OMSResult.IsValid)
                     {
-                        SaleDetailsData saleDetailsData = new SaleDetailsData();
-                        OMSResult = saleDetailsData.Delete(sale.SaleID);
-                        foreach (var item in sale.SaleDetail)
+                        if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
                         {
-                            item.SaleID = sale.SaleID;
-                            OMSResult = saleDetailsData.Insert(item);
+                            SaleDetailsData saleDetailsData = new SaleDetailsData();
+                            OMSResult = saleDetailsData.Delete(sale.SaleID);
+                            foreach (var item in sale.SaleDetail)
+                            {
+                                item.SaleID = sale.SaleID;
+                                OMSResult = saleDetailsData.Insert(item);
+                            }
                         }
                     }
+                    if (OMSResult.IsValid)
+                        result.Status = ErrorCode.Success;
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
                 }
-                if (OMSResult.IsValid)
-                    result.Status = ErrorCode.Success;
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
 
             }
             else
@@ -114,7 +119,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid saleID)
+        public Models.ApiResult Delete(int saleID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -134,7 +139,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Sale> GetByID(Guid saleID)
+        public ApiResultWithData<Sale> GetByID(int saleID)
         {
             var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Sale> result = new ApiResultWithData<Sale>();
@@ -153,6 +158,21 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
+        }
+        private ApiResultWithData<RecordResponse> ValidateSale(Sale sale, bool isUpdate = false)
+        {
+            // Validate basic required information is provided.
+            if (string.IsNullOrEmpty(sale.CustomerName))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (string.IsNullOrEmpty(sale.ContactNo))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (Utility.IsInvalidGuid(sale.ClientID) && !isUpdate)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (sale.SaleDetail == null || sale.SaleDetail.Count == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (isUpdate && sale.SaleID == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            return new ApiResultWithData<RecordResponse> { Status = ErrorCode.Success };
         }
     }
 }

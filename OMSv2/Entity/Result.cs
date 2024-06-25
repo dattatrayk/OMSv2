@@ -32,7 +32,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// 
         /// </summary>
-        public Guid ID { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// 

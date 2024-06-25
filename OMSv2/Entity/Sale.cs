@@ -12,7 +12,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Sale
         /// </summary>
-        public Guid SaleID { get; set; }
+        public int SaleID { get; set; }
 
         /// <summary>
         /// record the Date of the Sale.
@@ -22,7 +22,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// CustomerID
         /// </summary>
-        public Guid CustomerID { get; set; }
+        public int CustomerID { get; set; }
 
         /// <summary>
         /// Name of Customer

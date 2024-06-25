@@ -1,10 +1,22 @@
-﻿CREATE PROCEDURE [dbo].[Update_Customer](	@CustomerID UNIQUEIDENTIFIER , 
+﻿CREATE PROCEDURE [dbo].[Update_Customer]
+(
+	@CustomerID int , 
     @Name NVARCHAR(250) ,
     @ContactNo NVARCHAR(250) ,
     @Email NVARCHAR(250) ,
     @AddressDetails NVARCHAR(MAX) ,
-	@ModifiedBy	    UNIQUEIDENTIFIER)ASBEGIN       UPDATE Customer	   SET	    ModifiedBy=@ModifiedBy,		Name=@Name,
+	@ModifiedBy	    UNIQUEIDENTIFIER
+)
+
+AS
+BEGIN
+       UPDATE Customer
+	   SET
+	    ModifiedBy=@ModifiedBy,
+		Name=@Name,
 		ContactNo=@ContactNo  ,
 		Email=@Email  ,
 		AddressDetails=@AddressDetails  ,
-	    ModifiedOn=GETUTCDATE()	   WHERE CustomerID=@CustomerIDEND
+	    ModifiedOn=GETUTCDATE()
+	   WHERE CustomerID=@CustomerID
+END

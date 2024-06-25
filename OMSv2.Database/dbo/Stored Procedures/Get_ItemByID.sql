@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Get_ItemByID]
-@ItemID UNIQUEIDENTIFIER
+@ItemID int
 AS
 BEGIN
       SELECT 

@@ -11,7 +11,7 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of Sale
         /// </summary>
-        public Guid CustomerID { get; set; }
+        public int CustomerID { get; set; }
 
 
         /// <summary>

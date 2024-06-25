@@ -1,13 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[Get_SaleDetailsByID]
-@SaleDetailID UNIQUEIDENTIFIER
+@SaleDetailID int
 AS
 BEGIN
-      SELECT 		
+      SELECT 
+		
 		sd.SaleDetailID , 
 		sd.SaleID , 
 		sd.ItemID , 
 		sd.Price,
-		sd.Quantity ,		sd.CreatedBy,		sd.CreatedOn,
+		sd.Quantity ,
+		sd.CreatedBy,
+		sd.CreatedOn,
 		S.CustomerName AS SaleName,
 		i.Name as ItemName
 	  FROM

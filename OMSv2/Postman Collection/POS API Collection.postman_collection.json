@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5f1ad74c-facc-4b76-bb36-ce3d9c57c4fb",
+		"_postman_id": "d2a89108-2e6d-44fb-a9ed-a4348b6a3f28",
 		"name": "POS API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "569896"
+		"_exporter_id": "32125215"
 	},
 	"item": [
 		{
@@ -21,7 +21,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:62083/api/Brand",
+							"raw": "http://localhost:62083/api/Brand?clientID=9CB0F686-0336-4CDA-9B6E-3162CF5A2D25",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -30,6 +30,12 @@
 							"path": [
 								"api",
 								"Brand"
+							],
+							"query": [
+								{
+									"key": "clientID",
+									"value": "9CB0F686-0336-4CDA-9B6E-3162CF5A2D25"
+								}
 							]
 						}
 					},
@@ -53,10 +59,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"BrandName\": \"New Brand\",\n    \"CreatedName\" : \"Dev\"\n}"
+							"raw": "{\n    \"BrandName\": \"Brand 3\",\n    \"ClientID\" : \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:62083/api/Brand/CreateBrand",
+							"raw": "http://localhost:62083/api/Brand/Create",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -65,7 +71,7 @@
 							"path": [
 								"api",
 								"Brand",
-								"CreateBrand"
+								"Create"
 							]
 						}
 					},
@@ -89,10 +95,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"BrandID\": 2,\n    \"BrandName\": \"New Brand2\"\n}"
+							"raw": "{\n    \"BrandID\": \"2\",\n    \"BrandName\": \"New Brand 22\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:62083/api/Brand/UpdateBrand",
+							"raw": "http://localhost:62083/api/Brand/Update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -101,7 +107,7 @@
 							"path": [
 								"api",
 								"Brand",
-								"UpdateBrand"
+								"Update"
 							]
 						}
 					},
@@ -163,19 +169,801 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"brandID\": 1\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/Brand/GetByID",
+							"raw": "http://localhost:62083/api/Brand/GetByID?brandID=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "62083",
 							"path": [
+								"",
 								"api",
 								"Brand",
 								"GetByID"
+							],
+							"query": [
+								{
+									"key": "brandID",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "232323",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Category?clientID=9CB0F686-0336-4CDA-9B6E-3162CF5A2D25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Category"
+							],
+							"query": [
+								{
+									"key": "clientID",
+									"value": "9CB0F686-0336-4CDA-9B6E-3162CF5A2D25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"CategoryName\": \"Category 3\",\n    \"ClientID\" : \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Category/Create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Category",
+								"Create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"CategoryID\": \"2\",\n    \"CategoryName\": \"New Category 22\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Category/Update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Category",
+								"Update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Category/DeleteByID?categoryID=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Category",
+								"DeleteByID"
+							],
+							"query": [
+								{
+									"key": "categoryID",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Category/GetByID?categoryID=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"",
+								"api",
+								"Category",
+								"GetByID"
+							],
+							"query": [
+								{
+									"key": "categoryID",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "232323",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\r\n  \"brandID\": 1,\r\n  \"categoryID\": 0,\r\n  \"minPrice\": 20,\r\n  \"maxPrice\":30,\r\n  \"isInStock\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"Name\": \"Sample Item 1\",\n        \"Description\": \"This is a sample item description for item 1.\",\n        \"Price\": 24.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/5fa2dd/ffffff\",\n        \"Stock\": 150,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 2\",\n        \"Description\": \"This is a sample item description for item 2.\",\n        \"Price\": 29.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/ff4444/ffffff\",\n        \"Stock\": 90,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 3\",\n        \"Description\": \"This is a sample item description for item 3.\",\n        \"Price\": 22.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/cc0000/ffffff\",\n        \"Stock\": 80,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 4\",\n        \"Description\": \"This is a sample item description for item 4.\",\n        \"Price\": 19.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/dddddd/000000\",\n        \"Stock\": 70,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 5\",\n        \"Description\": \"This is a sample item description for item 5.\",\n        \"Price\": 25.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/5fa2dd/ffffff\",\n        \"Stock\": 120,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 6\",\n        \"Description\": \"This is a sample item description for item 6.\",\n        \"Price\": 17.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/ff4444/ffffff\",\n        \"Stock\": 60,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 7\",\n        \"Description\": \"This is a sample item description for item 7.\",\n        \"Price\": 21.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/cc0000/ffffff\",\n        \"Stock\": 140,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 8\",\n        \"Description\": \"This is a sample item description for item 8.\",\n        \"Price\": 19.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/dddddd/000000\",\n        \"Stock\": 130,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 9\",\n        \"Description\": \"This is a sample item description for item 9.\",\n        \"Price\": 26.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/5fa2dd/ffffff\",\n        \"Stock\": 150,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 10\",\n        \"Description\": \"This is a sample item description for item 10.\",\n        \"Price\": 23.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/ff4444/ffffff\",\n        \"Stock\": 70,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 11\",\n        \"Description\": \"This is a sample item description for item 11.\",\n        \"Price\": 28.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/cc0000/ffffff\",\n        \"Stock\": 110,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 12\",\n        \"Description\": \"This is a sample item description for item 12.\",\n        \"Price\": 22.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/dddddd/000000\",\n        \"Stock\": 140,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 13\",\n        \"Description\": \"This is a sample item description for item 13.\",\n        \"Price\": 21.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/5fa2dd/ffffff\",\n        \"Stock\": 90,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 14\",\n        \"Description\": \"This is a sample item description for item 14.\",\n        \"Price\": 27.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/ff4444/ffffff\",\n        \"Stock\": 130,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 15\",\n        \"Description\": \"This is a sample item description for item 15.\",\n        \"Price\": 20.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/cc0000/ffffff\",\n        \"Stock\": 60,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 16\",\n        \"Description\": \"This is a sample item description for item 16.\",\n        \"Price\": 18.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/dddddd/000000\",\n        \"Stock\": 100,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 17\",\n        \"Description\": \"This is a sample item description for item 17.\",\n        \"Price\": 24.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/5fa2dd/ffffff\",\n        \"Stock\": 70,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 18\",\n        \"Description\": \"This is a sample item description for item 18.\",\n        \"Price\": 26.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/ff4444/ffffff\",\n        \"Stock\": 110,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 19\",\n        \"Description\": \"This is a sample item description for item 19.\",\n        \"Price\": 23.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/cc0000/ffffff\",\n        \"Stock\": 80,\n        \"CategoryID\": \"2\",\n        \"BrandID\": \"2\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    },\n    {\n        \"Name\": \"Sample Item 20\",\n        \"Description\": \"This is a sample item description for item 20.\",\n        \"Price\": 19.99,\n        \"ImgURL\": \"http://dummyimage.com/200x200.png/dddddd/000000\",\n        \"Stock\": 140,\n        \"CategoryID\": \"1\",\n        \"BrandID\": \"1\",\n        \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\n    }\n]\n"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Item/Create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Item",
+								"Create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"Name\": \"Sample Item 1\",\n  \"Description\": \"This is a sample item description.\",\n  \"Price\": 19.99,\n  \"ImgURL\": \"http://example.com/image.jpg\",\n  \"Stock\": 100,\n  \"CategoryID\": 1,\n  \"BrandID\": 3,\n  \"ItemID\" : 1\n }"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Item/Update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Item",
+								"Update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Item/DeleteByID?itemID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Item",
+								"DeleteByID"
+							],
+							"query": [
+								{
+									"key": "itemID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Item/GetByID?itemID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"",
+								"api",
+								"Item",
+								"GetByID"
+							],
+							"query": [
+								{
+									"key": "itemID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "232323",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"ClientID\" : \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\n  \"Name\": \"John Doe\",\n  \"ContactNo\": \"123-456-7890\",\n  \"Email\": \"john.doe@example.com\",\n  \"AddressDetails\": {\n    \"Address\": \"123 Main St, Springfield\",\n    \"Latitude\": 37.7749,\n    \"Longitude\": -122.4194,\n    \"Country\": \"USA\",\n    \"State\": \"California\",\n    \"PinCode\": \"94103\"\n  }\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Customer/Create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Customer",
+								"Create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"CustomerID\" : 1,\n   \"ClientID\" : \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\n  \"Name\": \"John Doe1\",\n  \"ContactNo\": \"123-456-7890\",\n  \"Email\": \"john.doe@example.com\",\n  \"AddressDetails\": {\n    \"Address\": \"123 Main St, Springfield\",\n    \"Latitude\": 37.7749,\n    \"Longitude\": -122.4194,\n    \"Country\": \"USA\",\n    \"State\": \"California\",\n    \"PinCode\": \"94103\"\n  }\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Customer/Update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Customer",
+								"Update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Customer/DeleteByID?customerID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Customer",
+								"DeleteByID"
+							],
+							"query": [
+								{
+									"key": "customerID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Customer/GetByID?customerID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"",
+								"api",
+								"Customer",
+								"GetByID"
+							],
+							"query": [
+								{
+									"key": "customerID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sale",
+			"item": [
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "232323",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Sale",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\n  \"SaleDate\": \"2023-06-25T14:30:00\",\n  //\"CustomerID\": \"2\",\n  \"CustomerName\": \"John Doe\",\n  \"ContactNo\": \"555-1234\",\n  \"Email\": \"johndoe@example.com\",\n  \"Address\": \"123 Main St, Anytown, USA\",\n  \"TotalAmount\": 199.99,\n  \"Quantity\": 3,\n  \"SaleDetail\": [\n    {\n      \"ItemID\": \"2\",\n      \"Price\": 59.99,\n      \"Quantity\": 1,\n      \"SaleName\": \"Spring Sale\",\n      \"ItemName\": \"Sample Item 1\"\n    },\n    {\n      \"ItemID\": \"3\",\n      \"Price\": 79.99,\n      \"Quantity\": 1,\n      \"SaleName\": \"Spring Sale\",\n      \"ItemName\": \"Sample Item 2\"\n    },\n    {\n      \"ItemID\": \"4\",\n      \"Price\": 59.99,\n      \"Quantity\": 1,\n      \"SaleName\": \"Spring Sale\",\n      \"ItemName\": \"Sample Item 3\"\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Sale/Create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Sale",
+								"Create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\n  \"SaleID\": \"4\",\n  \"SaleDate\": \"2023-06-25T14:30:00\",\n  //\"CustomerID\": \"2\",\n  \"CustomerName\": \"John Doe\",\n  \"ContactNo\": \"555-1234\",\n  \"Email\": \"johndoe@example.com\",\n  \"Address\": \"123 Main St, Anytown, USA\",\n  \"TotalAmount\": 199.99,\n  \"Quantity\": 3,\n  \"SaleDetail\": [\n    {\n      \"ItemID\": \"2\",\n      \"Price\": 59.99,\n      \"Quantity\": 1,\n      \"SaleName\": \"Spring Sale\",\n      \"ItemName\": \"Sample Item 1\"\n    },\n    {\n      \"ItemID\": \"3\",\n      \"Price\": 79.99,\n      \"Quantity\": 1,\n      \"SaleName\": \"Spring Sale\",\n      \"ItemName\": \"Sample Item 2\"\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Sale/Update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Sale",
+								"Update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:62083/api/Sale/DeleteByID?saleID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"Sale",
+								"DeleteByID"
+							],
+							"query": [
+								{
+									"key": "saleID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "ApiKey",
+								"value": "your_api_key_here",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/Sale/GetByID?saleID=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"",
+								"api",
+								"Sale",
+								"GetByID"
+							],
+							"query": [
+								{
+									"key": "saleID",
+									"value": "4"
+								}
 							]
 						}
 					},

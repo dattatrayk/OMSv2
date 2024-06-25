@@ -73,6 +73,6 @@ namespace OMSv2.Service.Models
         /// <summary>
         /// Record ID
         /// </summary>
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

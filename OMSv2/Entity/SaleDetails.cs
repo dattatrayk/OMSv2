@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace OMSv2.Service.Entity
 {
     public class SaleDetails : AuditInfo
@@ -7,17 +6,17 @@ namespace OMSv2.Service.Entity
         /// <summary>
         /// unique identififier of SaleDetails
         /// </summary>
-        public Guid SaleDetailID { get; set; }
+        public int SaleDetailID { get; set; }
 
         /// <summary>
         /// SaleID of SaleDetails
         /// </summary>
-        public Guid SaleID { get; set; }
+        public int SaleID { get; set; }
 
         /// <summary>
         /// ItemID of SaleDetails
         /// </summary>
-        public Guid ItemID { get; set; }
+        public int ItemID { get; set; }
 
         /// <summary>
         /// Price of saledetails
@@ -29,7 +28,6 @@ namespace OMSv2.Service.Entity
         /// </summary>
         public int Quantity { get; set; }
 
-        public string SaleName { get; set; }
         public string ItemName { get; set; }
 
     }

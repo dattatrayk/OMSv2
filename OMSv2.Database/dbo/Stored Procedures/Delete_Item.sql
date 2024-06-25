@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_Item]
-@ItemID UNIQUEIDENTIFIER,
+@ItemID int,
 @ModifiedBy	    UNIQUEIDENTIFIER
 AS
 BEGIN

@@ -46,17 +46,19 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-
-                BrandData brandData = new BrandData();
-                brand.BrandID = Guid.NewGuid();
-                var OMSResult = brandData.Insert(brand);
-                if (OMSResult.IsValid)
+                result = ValidateBrand(brand);
+                if (result.Status == ErrorCode.Success)
                 {
-                    result.Status = ErrorCode.Success;
-                    result.Data = new RecordResponse { Id = OMSResult.ID };
+                    BrandData brandData = new BrandData();
+                    var OMSResult = brandData.Insert(brand);
+                    if (OMSResult.IsValid)
+                    {
+                        result.Status = ErrorCode.Success;
+                        result.Data = new RecordResponse { Id = OMSResult.ID };
+                    }
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
                 }
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
             }
 
 
@@ -77,13 +79,16 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                var OMSResult = brandData.Update(brand);
-                if (OMSResult.IsValid)
-                    result.Status = ErrorCode.Success;
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
-
+                result = ValidateBrand(brand, true);
+                if (result.Status == ErrorCode.Success)
+                {
+                    BrandData brandData = new BrandData();
+                    var OMSResult = brandData.Update(brand);
+                    if (OMSResult.IsValid)
+                        result.Status = ErrorCode.Success;
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
+                }
             }
             else
                 result.Status = apiKeyHelper.ErrorCode;
@@ -92,7 +97,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid brandID)
+        public Models.ApiResult Delete(int brandID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -112,7 +117,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Brand> GetByID(Guid brandID)
+        public ApiResultWithData<Brand> GetByID(int brandID)
         {
             var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Brand> result = new ApiResultWithData<Brand>();
@@ -131,6 +136,17 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
+        }
+        private ApiResultWithData<RecordResponse> ValidateBrand(Brand brand, bool isUpdate = false)
+        {
+            // Validate basic required information is provided.
+            if (string.IsNullOrEmpty(brand.BrandName))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (Utility.IsInvalidGuid(brand.ClientID) && !isUpdate)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (isUpdate && brand.BrandID == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            return new ApiResultWithData<RecordResponse> { Status = ErrorCode.Success };
         }
     }
 }

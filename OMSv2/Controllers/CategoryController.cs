@@ -42,16 +42,19 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                category.CategoryID = Guid.NewGuid();
-                CategoryData categoryData = new CategoryData();
-                var OMSResult = categoryData.Insert(category);
-                if (OMSResult.IsValid)
+                result = ValidateCategory(category);
+                if (result.Status == ErrorCode.Success)
                 {
-                    result.Status = ErrorCode.Success;
-                    result.Data = new RecordResponse { Id = OMSResult.ID };
+                    CategoryData categoryData = new CategoryData();
+                    var OMSResult = categoryData.Insert(category);
+                    if (OMSResult.IsValid)
+                    {
+                        result.Status = ErrorCode.Success;
+                        result.Data = new RecordResponse { Id = OMSResult.ID };
+                    }
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
                 }
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
             }
 
 
@@ -72,13 +75,16 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                CategoryData categoryData = new CategoryData();
-                var OMSResult = categoryData.Update(category);
-                if (OMSResult.IsValid)
-                    result.Status = ErrorCode.Success;
-                else
-                    result.Status = ErrorCode.SomethingWentWrong;
-
+                result = ValidateCategory(category, true);
+                if (result.Status == ErrorCode.Success)
+                {
+                    CategoryData categoryData = new CategoryData();
+                    var OMSResult = categoryData.Update(category);
+                    if (OMSResult.IsValid)
+                        result.Status = ErrorCode.Success;
+                    else
+                        result.Status = ErrorCode.SomethingWentWrong;
+                }
             }
             else
                 result.Status = apiKeyHelper.ErrorCode;
@@ -87,7 +93,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid categoryID)
+        public Models.ApiResult Delete(int categoryID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -107,7 +113,7 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Category> GetByID(Guid categoryID)
+        public ApiResultWithData<Category> GetByID(int categoryID)
         {
             var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Category> result = new ApiResultWithData<Category>();
@@ -126,6 +132,17 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
+        }
+        private ApiResultWithData<RecordResponse> ValidateCategory(Category category, bool isUpdate = false)
+        {
+            // Validate basic required information is provided.
+            if (string.IsNullOrEmpty(category.CategoryName))
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (Utility.IsInvalidGuid(category.ClientID) && !isUpdate)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            if (isUpdate && category.CategoryID == 0)
+                return new ApiResultWithData<RecordResponse> { Status = ErrorCode.MandatoryFieldMissing };
+            return new ApiResultWithData<RecordResponse> { Status = ErrorCode.Success };
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_Customer]
-@CustomerID UNIQUEIDENTIFIER,
+@CustomerID int,
 @ModifiedBy	    UNIQUEIDENTIFIER
 AS
 BEGIN
