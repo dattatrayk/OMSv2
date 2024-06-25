@@ -1,8 +1,9 @@
-﻿using System;
+﻿using OMSv2.Service.Entity;
+using System;
 
 namespace OMSv2.Service
 {
-    public class Item
+    public class Item : AuditInfo
     {
         /// <summary>
         /// unique identififier of Item
@@ -44,14 +45,17 @@ namespace OMSv2.Service
         /// </summary>
         public Guid BrandID { get; set; }
 
-        /// <summary>
-        /// CreatedName of item
-        /// </summary>
-        public string CreatedName { get; set; }
         public string BrandName { get; set; }
+
         public string CategoryName { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public Guid CreatedBy { get; set; }
-        public Guid ModifiedBy { get; set; }
+    }
+    public class ItemFilterParameter
+    {
+        public Guid ClientID { get; set; }
+        public Guid BrandID { get; set; }
+        public Guid CategoryID { get; set; }
+        public double MinPrice { get; set; }
+        public double MaxPrice { get; set; }
+        public bool IsInStock { get; set; }
     }
 }

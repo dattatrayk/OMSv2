@@ -21,4 +21,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CustomerID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0ef60216-a6be-431f-92f2-b71c730320e9" ChangeDateTime="06/24/2024 10:13:18">
+    <Property Name="ElementName" Value="[dbo].[Customer].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c1db6c1f-5c2a-46dc-aeaa-71793b428c75" ChangeDateTime="06/24/2024 10:14:18">
+    <Property Name="ElementName" Value="[dbo].[Customer].[Address]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AddressDetails" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="96787696-18b1-463d-9c40-040cdfb9a80f" ChangeDateTime="06/24/2024 11:46:13">
+    <Property Name="ElementName" Value="[dbo].[Customer].[EmailID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Email" />
+  </Operation>
 </Operations>

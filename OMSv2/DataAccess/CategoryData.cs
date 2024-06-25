@@ -1,4 +1,4 @@
-﻿using OMSv2.Service.DataAccess.Helpers;
+﻿using OMSv2.Service.Helpers;
 using OMSv2.Service.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,12 +8,15 @@ namespace OMSv2.Service
 {
     public class CategoryData
     {
-        public List<Category> GetAll()
+        
+        public List<Category> GetAll(Guid clientID)
         {
             var database = DbHandler.GetDatabase();
             var categoryList = new List<Category>();
             using (var command = database.GetStoredProcCommand("Select_Category"))
             {
+                database.AddInParameter(command, "ClientID ", DbType.Guid, clientID);
+
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     while (dataReader.Read())
@@ -37,6 +40,7 @@ namespace OMSv2.Service
             using (var command = database.GetStoredProcCommand("Insert_Category"))
             {
                 database.AddInParameter(command, "CategoryID ", DbType.Guid, category.CategoryID);
+                database.AddInParameter(command, "ClientID ", DbType.Guid, category.ClientID);
                 database.AddInParameter(command, "CategoryName", DbType.String, category.CategoryName);
                 database.AddInParameter(command, "CreatedBy", DbType.Guid, category.CreatedBy);
                 int outValue = database.ExecuteNonQuery(command);

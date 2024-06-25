@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OMSv2.Service.Entity
 {
-    public class Sale
+    public class Sale : AuditInfo
     {
+        public Sale()
+        {
+            SaleDetail = new List<SaleDetails>();
+        }
         /// <summary>
         /// unique identififier of Sale
         /// </summary>
@@ -50,11 +55,14 @@ namespace OMSv2.Service.Entity
         public int Quantity { get; set; }
 
         /// <summary>
-        /// CreatedName of Sale
+        /// Sales Details
         /// </summary>
-        public string CreatedName { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public Guid CreatedBy { get; set; }
-        public Guid ModifiedBy { get; set; }
+        public List<SaleDetails> SaleDetail { get; set; }
+
+    }
+
+    public class SaleFilterParameter
+    {
+        public Guid ClientID { get; set; }
     }
 }

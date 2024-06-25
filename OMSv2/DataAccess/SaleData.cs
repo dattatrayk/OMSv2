@@ -1,4 +1,4 @@
-﻿using OMSv2.Service.DataAccess.Helpers;
+﻿using OMSv2.Service.Helpers;
 using OMSv2.Service.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,12 +8,14 @@ namespace OMSv2.Service
 {
     public class SaleData
     {
-        public List<Sale> GetAll()
+        public List<Sale> GetAll(SaleFilterParameter parameter)
         {
             var database = DbHandler.GetDatabase();
             var saleList = new List<Sale>();
             using (var command = database.GetStoredProcCommand("Select_Sale"))
             {
+                database.AddInParameter(command, "ClientID", DbType.Guid, parameter.ClientID);
+
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     while (dataReader.Read())
@@ -44,6 +46,7 @@ namespace OMSv2.Service
             using (var command = database.GetStoredProcCommand("Insert_Sale"))
             {
                 database.AddInParameter(command, "SaleID", DbType.Guid, sale.SaleID);
+                database.AddInParameter(command, "ClientID", DbType.Guid, sale.ClientID);
                 database.AddInParameter(command, "SaleDate", DbType.DateTime, sale.SaleDate);
                 database.AddInParameter(command, "CustomerName", DbType.String, sale.CustomerName);
                 database.AddInParameter(command, "ContactNo", DbType.String, sale.ContactNo);
@@ -79,7 +82,7 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Result Delete(int saleID, Guid modifiedBy)
+        public Result Delete(Guid saleID, Guid modifiedBy)
         {
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_Sale"))
@@ -93,7 +96,7 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Sale GetByID(int saleID)
+        public Sale GetByID(Guid saleID)
         {
             var database = DbHandler.GetDatabase();
             var sale = new Sale();

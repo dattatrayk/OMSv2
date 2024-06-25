@@ -13,7 +13,7 @@ namespace OMSv2.Service.Controllers
     {
         // GET: api/Category
         [HttpGet]
-        public ApiResultWithData<List<Category>> Get()
+        public ApiResultWithData<List<Category>> Get(Guid clientID)
         {
             ApiResultWithData<List<Category>> result = new ApiResultWithData<List<Category>>();
 
@@ -23,7 +23,7 @@ namespace OMSv2.Service.Controllers
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
                 CategoryData categoryData = new CategoryData();
-                result.Data = categoryData.GetAll();
+                result.Data = categoryData.GetAll(clientID);
                 result.Status = ErrorCode.Success;
             }
             else

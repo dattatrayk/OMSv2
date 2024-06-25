@@ -1,4 +1,4 @@
-﻿using OMSv2.Service.DataAccess.Helpers;
+﻿using OMSv2.Service.Helpers;
 using OMSv2.Service.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,12 +8,16 @@ namespace OMSv2.Service
 {
     public class ItemData
     {
-        public List<Item> GetAll()
+        public List<Item> GetAll(ItemFilterParameter parameter)
         {
             var database = DbHandler.GetDatabase();
             var itemList = new List<Item>();
             using (var command = database.GetStoredProcCommand("Select_Item"))
             {
+                database.AddInParameter(command, "ClientID", DbType.Guid, parameter.ClientID);
+                database.AddInParameter(command, "BrandID", DbType.Guid, parameter.BrandID);
+                database.AddInParameter(command, "CategoryID", DbType.Guid, parameter.CategoryID);
+
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     while (dataReader.Read())
@@ -45,6 +49,7 @@ namespace OMSv2.Service
             using (var command = database.GetStoredProcCommand("Insert_Item"))
             {
                 database.AddInParameter(command, "ItemID", DbType.Guid, item.ItemID);
+                database.AddInParameter(command, "ClientID", DbType.Guid, item.ClientID);
                 database.AddInParameter(command, "Name", DbType.String, item.Name);
                 database.AddInParameter(command, "Description", DbType.String, item.Description);
                 database.AddInParameter(command, "Price", DbType.Double, item.Price);

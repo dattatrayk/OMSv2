@@ -1,5 +1,5 @@
-﻿using OMSv2.Service.DataAccess.Helpers;
-using OMSv2.Service.Entity;
+﻿using OMSv2.Service.Entity;
+using OMSv2.Service.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,12 +8,13 @@ namespace OMSv2.Service
 {
     public class BrandData
     {
-        public List<Brand> GetAll()
+        public List<Brand> GetAll(Guid clientID)
         {
             var database = DbHandler.GetDatabase();
             var brandList = new List<Brand>();
             using (var command = database.GetStoredProcCommand("Select_Brand"))
             {
+                database.AddInParameter(command, "ClientID ", DbType.Guid, clientID);
                 using (IDataReader dataReader = database.ExecuteReader(command))
                 {
                     while (dataReader.Read())
@@ -22,7 +23,6 @@ namespace OMSv2.Service
                         brand.BrandName = SafeParser.ParseString(dataReader["BrandName"]);
                         brand.BrandID = SafeParser.ParseGuid(dataReader["BrandID"]);
                         brand.CreatedOn = SafeParser.ParseDate(dataReader["CreatedOn"]);
-
                         brandList.Add(brand);
                     }
 
@@ -36,6 +36,7 @@ namespace OMSv2.Service
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Insert_Brand"))
             {
+                database.AddInParameter(command, "ClientID ", DbType.Guid, brand.ClientID);
                 database.AddInParameter(command, "BrandID ", DbType.Guid, brand.BrandID);
                 database.AddInParameter(command, "BrandName", DbType.String, brand.BrandName);
                 database.AddInParameter(command, "CreatedBy", DbType.Guid, brand.CreatedBy);

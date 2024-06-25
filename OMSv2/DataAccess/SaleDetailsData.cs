@@ -1,4 +1,4 @@
-﻿using OMSv2.Service.DataAccess.Helpers;
+﻿using OMSv2.Service.Helpers;
 using OMSv2.Service.Entity;
 using System;
 using System.Collections.Generic;
@@ -72,13 +72,12 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
-        public Result Delete(int saleDetailsID, Guid modifiedBy)
+        public Result Delete(Guid saleID)
         {
             var database = DbHandler.GetDatabase();
             using (var command = database.GetStoredProcCommand("Delete_SaleDetails"))
             {
-                database.AddInParameter(command, "SaleDetailID", DbType.Int16, saleDetailsID);
-                database.AddInParameter(command, "ModifiedBy", DbType.Guid, modifiedBy);
+                database.AddInParameter(command, "SaleID", DbType.Guid, saleID);
 
                 int outValue = database.ExecuteNonQuery(command);
                 if (outValue > 0)

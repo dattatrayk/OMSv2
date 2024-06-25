@@ -92,6 +92,12 @@
     <Build Include="dbo\Stored Procedures\Insert_Category.sql" />
     <Build Include="dbo\Stored Procedures\Select_Category.sql" />
     <Build Include="dbo\Stored Procedures\Update_Category.sql" />
+    <Build Include="dbo\Tables\Customer.sql" />
+    <Build Include="dbo\Stored Procedures\Delete_Customer.sql" />
+    <Build Include="dbo\Stored Procedures\Get_CustomerByID.sql" />
+    <Build Include="dbo\Stored Procedures\Insert_Customer.sql" />
+    <Build Include="dbo\Stored Procedures\Update_Customer.sql" />
+    <Build Include="dbo\Stored Procedures\Select_Customer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="OMSv2.Database.refactorlog" />

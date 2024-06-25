@@ -19,5 +19,6 @@ BEGIN
 	     Item i
 		 left outer join Brand B on B.BrandID = i.BrandID
 	    left outer join Category C on C.CategoryID = i.CategoryID
-	  WHERE ItemID=@ItemID
+	  WHERE i.ItemID=@ItemID
+	  and i.IsDeleted!=1
 END

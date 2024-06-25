@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Select_Category]
+@ClientID UNIQUEIDENTIFIER
 AS
 BEGIN
       SELECT 
@@ -8,5 +9,6 @@ BEGIN
 	  FROM Category 
 	  WHERE 
 	  IsDeleted != 1
+	  and ClientID=@ClientID
     Order By CreatedOn desc
 END

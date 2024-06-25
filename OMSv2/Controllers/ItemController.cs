@@ -12,8 +12,8 @@ namespace OMSv2.Service.Controllers
     public class ItemController : ControllerBase
     {
         // GET: api/Item
-        [HttpGet]
-        public ApiResultWithData<List<Item>> Get()
+        [HttpPost]
+        public ApiResultWithData<List<Item>> Get(ItemFilterParameter parameter)
         {
             ApiResultWithData<List<Item>> result = new ApiResultWithData<List<Item>>();
 
@@ -23,7 +23,7 @@ namespace OMSv2.Service.Controllers
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
                 ItemData itemData = new ItemData();
-                result.Data = itemData.GetAll();
+                result.Data = itemData.GetAll(parameter);
                 result.Status = ErrorCode.Success;
             }
             else
@@ -34,7 +34,7 @@ namespace OMSv2.Service.Controllers
 
         // POST: api/Item
         [HttpPost("Create")]
-        public ApiResultWithData<RecordResponse> Post(List<Item> items)
+        public ApiResultWithData<RecordResponse> Post([FromBody]List<Item> items)
         {
             var result = new ApiResultWithData<RecordResponse>();
             var apiKeyHelper = new ApiKeyHelper();

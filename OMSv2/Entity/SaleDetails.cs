@@ -2,7 +2,7 @@
 
 namespace OMSv2.Service.Entity
 {
-    public class SaleDetails
+    public class SaleDetails : AuditInfo
     {
         /// <summary>
         /// unique identififier of SaleDetails
@@ -29,14 +29,8 @@ namespace OMSv2.Service.Entity
         /// </summary>
         public int Quantity { get; set; }
 
-        /// <summary>
-        /// CreatedName of saledetails
-        /// </summary>
-        public string CreatedName { get; set; }
         public string SaleName { get; set; }
         public string ItemName { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public Guid CreatedBy { get; set; }
-        public Guid ModifiedBy { get; set; }
+
     }
 }

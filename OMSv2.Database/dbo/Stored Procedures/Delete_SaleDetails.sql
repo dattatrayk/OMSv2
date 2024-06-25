@@ -1,12 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[Delete_SaleDetails]
-@SaleDetailID UNIQUEIDENTIFIER,
-@ModifiedBy	    UNIQUEIDENTIFIER
+@SaleID UNIQUEIDENTIFIER
 AS
 BEGIN
-      UPDATE SaleDetails
-	   SET
-	     IsDeleted=1,
-		 ModifiedBy=@ModifiedBy,
-		 ModifiedOn=GETUTCDATE()
-	   WHERE SaleDetailID=@SaleDetailID
+      Delete 
+	  From 
+	  SaleDetails
+	   WHERE SaleID=@SaleID
 END

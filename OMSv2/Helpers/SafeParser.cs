@@ -1,11 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace OMSv2.Service.DataAccess.Helpers
+namespace OMSv2.Service.Helpers
 {
     public class SafeParser
     {

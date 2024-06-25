@@ -6,4 +6,5 @@ BEGIN
 	  FROM
 	     Category
 	  WHERE CategoryID=@CategoryID
+	  and IsDeleted!=1
 END

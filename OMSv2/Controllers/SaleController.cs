@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -13,21 +9,21 @@ namespace OMSv2.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class SaleController : ControllerBase
     {
-        // GET: api/Brand
+        // GET: api/Sale
         [HttpGet]
-        public ApiResultWithData<List<Brand>> Get(Guid clientID)
+        public ApiResultWithData<List<Sale>> Get(SaleFilterParameter parameter)
         {
-            ApiResultWithData<List<Brand>> result = new ApiResultWithData<List<Brand>>();
+            ApiResultWithData<List<Sale>> result = new ApiResultWithData<List<Sale>>();
 
             var apiKeyHelper = new ApiKeyHelper();
             var apiKey = Request.Headers["ApiKey"].ToString();
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                result.Data = brandData.GetAll(clientID);
+                SaleData saleData = new SaleData();
+                result.Data = saleData.GetAll(parameter);
                 result.Status = ErrorCode.Success;
             }
             else
@@ -36,9 +32,9 @@ namespace OMSv2.Service.Controllers
             return result;
         }
 
-        // POST: api/Brand
+        // POST: api/Sale
         [HttpPost("Create")]
-        public ApiResultWithData<RecordResponse> Post(Brand brand)
+        public ApiResultWithData<RecordResponse> Post(Sale sale)
         {
             var result = new ApiResultWithData<RecordResponse>();
             var apiKeyHelper = new ApiKeyHelper();
@@ -46,21 +42,34 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
+                SaleData saleData = new SaleData();
+                var omsResult = new Result();
 
-                BrandData brandData = new BrandData();
-                brand.BrandID = Guid.NewGuid();
-                var OMSResult = brandData.Insert(brand);
-                if (OMSResult.IsValid)
+                sale.SaleID = Guid.NewGuid();
+                omsResult = saleData.Insert(sale);
+
+                if (omsResult.IsValid)
+                {
+
+                    if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
+                    {
+                        SaleDetailsData saleDetailsData = new SaleDetailsData();
+
+                        foreach (var item in sale.SaleDetail)
+                        {
+                            item.SaleID = sale.SaleID;
+                            omsResult = saleDetailsData.Insert(item);
+                        }
+                    }
+                }
+                if (omsResult.IsValid)
                 {
                     result.Status = ErrorCode.Success;
-                    result.Data = new RecordResponse { Id = OMSResult.ID };
+                    result.Data = new RecordResponse { Id = sale.SaleID };
                 }
                 else
                     result.Status = ErrorCode.SomethingWentWrong;
             }
-
-
-
             else
                 result.Status = apiKeyHelper.ErrorCode;
 
@@ -68,7 +77,7 @@ namespace OMSv2.Service.Controllers
         }
 
         [HttpPost("Update")]
-        public Models.ApiResult Update(Brand brand)
+        public Models.ApiResult Update(Sale sale)
         {
             Models.ApiResult result = new Models.ApiResult();
 
@@ -77,8 +86,21 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                var OMSResult = brandData.Update(brand);
+                SaleData saleData = new SaleData();
+                var OMSResult = saleData.Update(sale);
+                if (OMSResult.IsValid)
+                {
+                    if (sale.SaleDetail != null && sale.SaleDetail.Count > 0)
+                    {
+                        SaleDetailsData saleDetailsData = new SaleDetailsData();
+                        OMSResult = saleDetailsData.Delete(sale.SaleID);
+                        foreach (var item in sale.SaleDetail)
+                        {
+                            item.SaleID = sale.SaleID;
+                            OMSResult = saleDetailsData.Insert(item);
+                        }
+                    }
+                }
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
@@ -92,7 +114,7 @@ namespace OMSv2.Service.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(Guid brandID)
+        public Models.ApiResult Delete(Guid saleID)
         {
             Models.ApiResult result = new Models.ApiResult();
             var apiKeyHelper = new ApiKeyHelper();
@@ -100,8 +122,8 @@ namespace OMSv2.Service.Controllers
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
-                BrandData brandData = new BrandData();
-                var OMSResult = brandData.Delete(brandID, Guid.Empty);
+                SaleData saleData = new SaleData();
+                var OMSResult = saleData.Delete(saleID, Guid.Empty);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
@@ -112,17 +134,17 @@ namespace OMSv2.Service.Controllers
             return result;
         }
         [HttpPost("GetByID")]
-        public ApiResultWithData<Brand> GetByID(Guid brandID)
+        public ApiResultWithData<Sale> GetByID(Guid saleID)
         {
             var apiKeyHelper = new ApiKeyHelper();
-            ApiResultWithData<Brand> result = new ApiResultWithData<Brand>();
+            ApiResultWithData<Sale> result = new ApiResultWithData<Sale>();
             var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
 
-                BrandData brandData = new BrandData();
-                var data = brandData.GetByID(brandID);
+                SaleData saleData = new SaleData();
+                var data = saleData.GetByID(saleID);
                 result.Data = data;
                 result.Status = ErrorCode.Success;
 

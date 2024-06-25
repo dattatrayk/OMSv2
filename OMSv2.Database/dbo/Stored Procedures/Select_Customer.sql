@@ -1,19 +1,16 @@
-﻿CREATE PROCEDURE [dbo].[Select_Sale]
+﻿CREATE PROCEDURE [dbo].[Select_Customer]
 @ClientID UNIQUEIDENTIFIER
 AS
 BEGIN
       SELECT 
-	     SaleID  , 
-		SaleDate,
-		CustomerName ,
+	     CustomerID  , 
+		Name ,
 		ContactNo  ,
 		Email  ,
-		Address  ,
-		TotalAmount  ,
-		Quantity ,
+		AddressDetails  ,
 		CreatedBy,
 		CreatedOn
-	  FROM Sale 
+	  FROM Customer 
 	  WHERE 
 	  IsDeleted != 1
 	  and ClientID=@ClientID
