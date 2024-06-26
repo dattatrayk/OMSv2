@@ -37,4 +37,9 @@ BEGIN
 	   @CreatedBy,
 	   GETUTCDATE()
 	   )
+
+	   Update Item 
+	   set
+	   Stock=Stock-@Quantity
+	   where ItemID=@ItemID
 END

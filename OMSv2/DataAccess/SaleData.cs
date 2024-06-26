@@ -48,6 +48,7 @@ namespace OMSv2.Service
                 //database.AddInParameter(command, "SaleID", DbType.Int32, sale.SaleID);
                 database.AddInParameter(command, "ClientID", DbType.Guid, sale.ClientID);
                 database.AddInParameter(command, "SaleDate", DbType.DateTime, sale.SaleDate);
+                database.AddInParameter(command, "CustomerID", DbType.Int32, sale.CustomerID);
                 database.AddInParameter(command, "CustomerName", DbType.String, sale.CustomerName);
                 database.AddInParameter(command, "ContactNo", DbType.String, sale.ContactNo);
                 database.AddInParameter(command, "Email", DbType.String, sale.Email);

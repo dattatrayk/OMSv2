@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -12,7 +13,7 @@ namespace OMSv2.Service.Controllers
     public class CustomerController : ControllerBase
     {
         // GET: api/Customer
-        [HttpGet]
+        [HttpPost]
         public ApiResultWithData<List<Customer>> Get(CustomerFilterParameter parameter)
         {
             ApiResultWithData<List<Customer>> result = new ApiResultWithData<List<Customer>>();
@@ -23,7 +24,11 @@ namespace OMSv2.Service.Controllers
             if (apiKeyHelper.IsValidAPIKey(apiKey))
             {
                 CustomerData customerData = new CustomerData();
-                result.Data = customerData.GetAll(parameter);
+                var customerDetails = customerData.GetAll(parameter);
+                customerDetails = customerDetails.Where(x =>!string.IsNullOrEmpty(x.Name)).ToList();
+                if (customerDetails != null && !string.IsNullOrEmpty(parameter.SearchText))
+                    customerDetails = customerDetails.FindAll(s => s.Name.ToUpper().Contains(parameter.SearchText.ToUpper()));
+                result.Data = customerDetails;
                 result.Status = ErrorCode.Success;
             }
             else
@@ -116,7 +121,7 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
             return result;
         }
-        [HttpPost("GetByID")]
+        [HttpGet("GetByID")]
         public ApiResultWithData<Customer> GetByID(int customerID)
         {
             var apiKeyHelper = new ApiKeyHelper();

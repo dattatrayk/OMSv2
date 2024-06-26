@@ -3,6 +3,7 @@
 AS
 BEGIN
       SELECT 
+		CustomerID ,
 		Name ,
 		ContactNo,
 		Email ,

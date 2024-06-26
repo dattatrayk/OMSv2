@@ -12,7 +12,7 @@ namespace OMSv2.Service.Controllers
     public class SaleController : ControllerBase
     {
         // GET: api/Sale
-        [HttpGet]
+        [HttpPost]
         public ApiResultWithData<List<Sale>> Get(SaleFilterParameter parameter)
         {
             ApiResultWithData<List<Sale>> result = new ApiResultWithData<List<Sale>>();
@@ -138,7 +138,7 @@ namespace OMSv2.Service.Controllers
                 result.Status = apiKeyHelper.ErrorCode;
             return result;
         }
-        [HttpPost("GetByID")]
+        [HttpGet("GetByID")]
         public ApiResultWithData<Sale> GetByID(int saleID)
         {
             var apiKeyHelper = new ApiKeyHelper();

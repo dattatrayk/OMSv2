@@ -98,6 +98,7 @@ namespace OMSv2.Service
                 {
                     if (dataReader.Read())
                     {
+                        customer.CustomerID = SafeParser.ParseInteger(dataReader["CustomerID"]);
                         customer.Name = SafeParser.ParseString(dataReader["Name"]);
                         customer.ContactNo = SafeParser.ParseString(dataReader["ContactNo"]);
                         customer.Email = SafeParser.ParseString(dataReader["Email"]);

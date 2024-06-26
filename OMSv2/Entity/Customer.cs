@@ -47,5 +47,6 @@ namespace OMSv2.Service.Entity
     public class CustomerFilterParameter
     {
         public Guid ClientID { get; set; }
+        public string SearchText { get; set; }
     }
 }
