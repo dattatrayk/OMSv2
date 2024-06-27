@@ -1,0 +1,8 @@
+﻿CREATE TABLE Users (
+    UserId UNIQUEIDENTIFIER PRIMARY KEY,
+    ClientID UNIQUEIDENTIFIER,
+    Username NVARCHAR(100) NOT NULL,
+    PasswordHash NVARCHAR(64) NOT NULL,
+    IsActive BIT NOT NULL,
+	SessionToken NVARCHAR(255) NULL
+);
