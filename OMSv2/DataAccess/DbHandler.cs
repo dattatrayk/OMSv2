@@ -10,8 +10,7 @@ namespace OMSv2.Service
         }
         private static string GetConntionString()
         {
-            return "Data Source=FLEETROOT2\\SQLEXPRESS; Initial Catalog=OMSV2;Integrated Security=True";
+            return "Data Source=FLEETROOT-DEV\\SQLEXPRESS; Initial Catalog=OMSV2;Integrated Security=True";
         }
-
     }
 }

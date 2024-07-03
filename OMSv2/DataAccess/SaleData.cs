@@ -1,5 +1,5 @@
-﻿using OMSv2.Service.Helpers;
-using OMSv2.Service.Entity;
+﻿using OMSv2.Service.Entity;
+using OMSv2.Service.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -116,6 +116,7 @@ namespace OMSv2.Service
                 {
                     if (dataReader.Read())
                     {
+                        sale.SaleID = saleID;
                         sale.SaleDate = SafeParser.ParseDate(dataReader["SaleDate"]);
                         sale.CustomerName = SafeParser.ParseString(dataReader["CustomerName"]);
                         sale.ContactNo = SafeParser.ParseString(dataReader["ContactNo"]);
