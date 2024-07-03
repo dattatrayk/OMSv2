@@ -402,7 +402,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\r\n  \"brandID\": 1,\r\n  \"categoryID\": 0,\r\n  \"minPrice\": 20,\r\n  \"maxPrice\":30,\r\n  \"isInStock\": true\r\n}",
+							"raw": "{\r\n  \"ClientID\": \"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\",\r\n  \"brandID\": 0,\r\n  \"categoryID\": 1,\r\n  \"minPrice\": 20,\r\n  \"maxPrice\":30,\r\n  \"isInStock\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -584,11 +584,8 @@
 			"item": [
 				{
 					"name": "Get All",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "ApiKey",
@@ -732,8 +729,11 @@
 				},
 				{
 					"name": "Get By ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -780,11 +780,8 @@
 			"item": [
 				{
 					"name": "Get All",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "ApiKey",
@@ -928,8 +925,11 @@
 				},
 				{
 					"name": "Get By ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -963,6 +963,98 @@
 								{
 									"key": "saleID",
 									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\":\"dev@fleetroot.com\",\r\n    \"Password\":\"Admin@123\",\r\n    \"ClientID\":\"9CB0F686-0336-4CDA-9B6E-3162CF5A2D25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\":\"dev@fleetroot.com\",\r\n    \"Password\":\"Admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:62083/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:62083/api/auth/logout?userID=3D51F1F8-7769-424F-A49A-FF98490AC3E8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "62083",
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "3D51F1F8-7769-424F-A49A-FF98490AC3E8"
 								}
 							]
 						}
