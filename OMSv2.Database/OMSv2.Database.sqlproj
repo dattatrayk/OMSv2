@@ -101,6 +101,10 @@
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Tables\Client.sql" />
     <Build Include="dbo\Stored Procedures\Get_ApiKey.sql" />
+    <Build Include="dbo\Stored Procedures\Insert_Client.sql" />
+    <Build Include="dbo\Stored Procedures\Insert_User.sql" />
+    <Build Include="dbo\Stored Procedures\Get_UserByID.sql" />
+    <Build Include="dbo\Stored Procedures\Validate_ItemCode.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="OMSv2.Database.refactorlog" />

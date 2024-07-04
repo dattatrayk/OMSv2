@@ -48,6 +48,7 @@ namespace OMSv2.Service
         public string BrandName { get; set; }
 
         public string CategoryName { get; set; }
+        public string Code { get; set; }
     }
     public class ItemFilterParameter
     {

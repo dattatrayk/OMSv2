@@ -1,49 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using OMSv2.Service.Entity;
 using System.Security.Cryptography;
 using OMSv2.Service.Helpers;
 using OMSv2.Service.DataAccess;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OMSv2.Service.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
-    public class AuthController : ControllerBase
+    [Route("api/account")]
+    public class AccountController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private readonly IConfiguration _configuration;
 
-        public AuthController(AppDbContext dbContext, IConfiguration configuration)
+        public AccountController(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            _configuration = configuration;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest model)
+        public async Task<IActionResult> Register(Register model)
         {
             if (ModelState.IsValid)
             {
+
+                var apiKeyHelper = new ApiKeyHelper();
+                var apiKey = apiKeyHelper.GetApiKey(Request);
+                var isValidApiKey = apiKeyHelper.IsValidAPI(apiKey);
+
+                if (!isValidApiKey)
+                {
+                    return BadRequest(new { message = "Invalid API Key" });
+                }
                 // Check if username already exists
-                var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
+                var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == model.Username && u.ClientID == apiKeyHelper.ClientID);
                 if (existingUser != null)
                 {
                     return BadRequest(new { message = "Username already exists" });
                 }
-
                 // Create new user
                 var newUser = new User
                 {
-                    ClientID = model.ClientID,
+                    ClientID = apiKeyHelper.ClientID,
                     Username = model.Username,
-                    PasswordHash = HashPassword(model.Password), // Implement HashPassword method
+                    PasswordHash = HashPassword(model.Password),
                     IsActive = true,
                     UserId = Guid.NewGuid(),
                 };
@@ -58,7 +63,7 @@ namespace OMSv2.Service.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest model)
+        public async Task<IActionResult> Login(Login model)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
             if (user == null || !VerifyPassword(model.Password, user.PasswordHash)) // Implement VerifyPassword method
@@ -82,22 +87,21 @@ namespace OMSv2.Service.Controllers
 
             ClientData clientData = new ClientData();
             var apiKey = clientData.GetApiKey(user.ClientID);
-            return Ok(new { token, apiKey });
+            return Ok(new { token, apiKey, user.UserId, user.ClientID });
         }
 
         private string GenerateJwtToken(Guid userId)
         {
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:SecretKey"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userId.ToString()) }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingProvider.GetSecretKey()));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var token = new JwtSecurityToken(
+                issuer: AppSettingProvider.GetIssuer(),
+                audience: AppSettingProvider.GetAudience(),
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         // Other methods for logout, check session, etc.
@@ -118,7 +122,6 @@ namespace OMSv2.Service.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout(Guid userId)
         {
-            //var userId = GetUserIdFromContext();
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
@@ -132,11 +135,7 @@ namespace OMSv2.Service.Controllers
             return Ok(new { message = "Logged out successfully" });
         }
 
-        private Guid GetUserIdFromContext()
-        {
-            var user = HttpContext.Items["User"] as User;
-            return user?.UserId ?? Guid.Empty;
-        }
+       
 
     }
 

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -15,128 +12,91 @@ namespace OMSv2.Service.Controllers
     [ApiController]
     public class BrandController : ControllerBase
     {
-        // GET: api/Brand
+        [Authorize]
         [HttpGet]
         public ApiResultWithData<List<Brand>> Get(Guid clientID)
         {
             ApiResultWithData<List<Brand>> result = new ApiResultWithData<List<Brand>>();
 
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString();
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                BrandData brandData = new BrandData();
-                result.Data = brandData.GetAll(clientID);
-                result.Status = ErrorCode.Success;
-            }
-            else
-                result.Status = ErrorCode.InvalidOrEmptyID;
-
+            BrandData brandData = new BrandData();
+            result.Data = brandData.GetAll(clientID);
+            result.Status = ErrorCode.Success;
             return result;
         }
 
-        // POST: api/Brand
+        [Authorize]
         [HttpPost("Create")]
         public ApiResultWithData<RecordResponse> Post(Brand brand)
         {
             var result = new ApiResultWithData<RecordResponse>();
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                result = ValidateBrand(brand);
-                if (result.Status == ErrorCode.Success)
-                {
-                    BrandData brandData = new BrandData();
-                    var OMSResult = brandData.Insert(brand);
-                    if (OMSResult.IsValid)
-                    {
-                        result.Status = ErrorCode.Success;
-                        result.Data = new RecordResponse { Id = OMSResult.ID };
-                    }
-                    else
-                        result.Status = ErrorCode.SomethingWentWrong;
-                }
-            }
-
-
-
-            else
-                result.Status = apiKeyHelper.ErrorCode;
-
-            return result;
-        }
-
-        [HttpPost("Update")]
-        public Models.ApiResult Update(Brand brand)
-        {
-            Models.ApiResult result = new Models.ApiResult();
-
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                result = ValidateBrand(brand, true);
-                if (result.Status == ErrorCode.Success)
-                {
-                    BrandData brandData = new BrandData();
-                    var OMSResult = brandData.Update(brand);
-                    if (OMSResult.IsValid)
-                        result.Status = ErrorCode.Success;
-                    else
-                        result.Status = ErrorCode.SomethingWentWrong;
-                }
-            }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
-            return result;
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(int brandID)
-        {
-            Models.ApiResult result = new Models.ApiResult();
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
+            result = ValidateBrand(brand);
+            if (result.Status == ErrorCode.Success)
             {
                 BrandData brandData = new BrandData();
-                var OMSResult = brandData.Delete(brandID, Guid.Empty);
+                var OMSResult = brandData.Insert(brand);
+                if (OMSResult.IsValid)
+                {
+                    result.Status = ErrorCode.Success;
+                    result.Data = new RecordResponse { Id = OMSResult.ID };
+                }
+                else
+                    result.Status = ErrorCode.SomethingWentWrong;
+            }
+
+            return result;
+        }
+
+        [Authorize]
+        [HttpPost("Update")]
+        public ApiResult Update(Brand brand)
+        {
+            ApiResult result = new ApiResult();
+
+            result = ValidateBrand(brand, true);
+            if (result.Status == ErrorCode.Success)
+            {
+                BrandData brandData = new BrandData();
+                var OMSResult = brandData.Update(brand);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
                     result.Status = ErrorCode.SomethingWentWrong;
             }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
+
             return result;
         }
+
+        [Authorize]
+        [HttpPost("DeleteByID")]
+        public ApiResult Delete(int brandID)
+        {
+            ApiResult result = new ApiResult();
+
+            BrandData brandData = new BrandData();
+            var OMSResult = brandData.Delete(brandID, Guid.Empty);
+            if (OMSResult.IsValid)
+                result.Status = ErrorCode.Success;
+            else
+                result.Status = ErrorCode.SomethingWentWrong;
+
+            return result;
+        }
+
+        [Authorize]
         [HttpPost("GetByID")]
         public ApiResultWithData<Brand> GetByID(int brandID)
         {
-            var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Brand> result = new ApiResultWithData<Brand>();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-
-                BrandData brandData = new BrandData();
-                var data = brandData.GetByID(brandID);
-                result.Data = data;
-                result.Status = ErrorCode.Success;
-
-            }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
+            BrandData brandData = new BrandData();
+            var data = brandData.GetByID(brandID);
+            result.Data = data;
+            result.Status = ErrorCode.Success;
 
             return result;
         }
+
         private ApiResultWithData<RecordResponse> ValidateBrand(Brand brand, bool isUpdate = false)
         {
             // Validate basic required information is provided.

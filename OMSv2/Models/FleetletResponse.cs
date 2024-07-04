@@ -74,5 +74,6 @@ namespace OMSv2.Service.Models
         /// Record ID
         /// </summary>
         public int Id { get; set; }
+        public string ApiKey { get; set; }
     }
 }

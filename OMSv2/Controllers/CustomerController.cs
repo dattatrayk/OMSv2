@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -12,136 +13,96 @@ namespace OMSv2.Service.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        // GET: api/Customer
+        [Authorize]
         [HttpPost]
         public ApiResultWithData<List<Customer>> Get(CustomerFilterParameter parameter)
         {
             ApiResultWithData<List<Customer>> result = new ApiResultWithData<List<Customer>>();
 
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString();
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                CustomerData customerData = new CustomerData();
-                var customerDetails = customerData.GetAll(parameter);
-                customerDetails = customerDetails.Where(x =>!string.IsNullOrEmpty(x.Name)).ToList();
-                if (customerDetails != null && !string.IsNullOrEmpty(parameter.SearchText))
-                    customerDetails = customerDetails.FindAll(s => s.Name.ToUpper().Contains(parameter.SearchText.ToUpper()));
-                result.Data = customerDetails;
-                result.Status = ErrorCode.Success;
-            }
-            else
-                result.Status = ErrorCode.InvalidOrEmptyID;
+            CustomerData customerData = new CustomerData();
+            var customerDetails = customerData.GetAll(parameter);
+            customerDetails = customerDetails.Where(x => !string.IsNullOrEmpty(x.Name)).ToList();
+            if (customerDetails != null && !string.IsNullOrEmpty(parameter.SearchText))
+                customerDetails = customerDetails.FindAll(s => s.Name.ToUpper().Contains(parameter.SearchText.ToUpper()));
+            result.Data = customerDetails;
+            result.Status = ErrorCode.Success;
 
             return result;
         }
 
-        // POST: api/Customer
+        [Authorize]
         [HttpPost("Create")]
         public ApiResultWithData<RecordResponse> Post(Customer customer)
         {
             var result = new ApiResultWithData<RecordResponse>();
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                result = ValidateCustomer(customer);
-                if (result.Status == ErrorCode.Success)
-                {
-                    CustomerData customerData = new CustomerData();
-                    var omsResult = new Result();
-
-                    omsResult = customerData.Insert(customer);
-
-                    if (omsResult.IsValid)
-                    {
-                        result.Status = ErrorCode.Success;
-                        result.Data = new RecordResponse { Id = customer.CustomerID };
-                    }
-                    else
-                        result.Status = ErrorCode.SomethingWentWrong;
-                }
-            }
-
-
-
-            else
-                result.Status = apiKeyHelper.ErrorCode;
-
-            return result;
-        }
-
-        [HttpPost("Update")]
-        public Models.ApiResult Update(Customer customer)
-        {
-            Models.ApiResult result = new Models.ApiResult();
-
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                result = ValidateCustomer(customer, true);
-                if (result.Status == ErrorCode.Success)
-                {
-                    CustomerData customerData = new CustomerData();
-                    var OMSResult = customerData.Update(customer);
-                    if (OMSResult.IsValid)
-                        result.Status = ErrorCode.Success;
-                    else
-                        result.Status = ErrorCode.SomethingWentWrong;
-                }
-
-            }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
-            return result;
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(int customerID)
-        {
-            Models.ApiResult result = new Models.ApiResult();
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
+            result = ValidateCustomer(customer);
+            if (result.Status == ErrorCode.Success)
             {
                 CustomerData customerData = new CustomerData();
-                var OMSResult = customerData.Delete(customerID, Guid.Empty);
+                var omsResult = new Result();
+
+                omsResult = customerData.Insert(customer);
+
+                if (omsResult.IsValid)
+                {
+                    result.Status = ErrorCode.Success;
+                    result.Data = new RecordResponse { Id = customer.CustomerID };
+                }
+                else
+                    result.Status = ErrorCode.SomethingWentWrong;
+            }
+
+            return result;
+        }
+
+        [Authorize]
+        [HttpPost("Update")]
+        public ApiResult Update(Customer customer)
+        {
+            ApiResult result = new ApiResult();
+
+            result = ValidateCustomer(customer, true);
+            if (result.Status == ErrorCode.Success)
+            {
+                CustomerData customerData = new CustomerData();
+                var OMSResult = customerData.Update(customer);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
                     result.Status = ErrorCode.SomethingWentWrong;
             }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
+
             return result;
         }
+
+        [Authorize]
+        [HttpPost("DeleteByID")]
+        public ApiResult Delete(int customerID)
+        {
+            ApiResult result = new ApiResult();
+            CustomerData customerData = new CustomerData();
+            var OMSResult = customerData.Delete(customerID, Guid.Empty);
+            if (OMSResult.IsValid)
+                result.Status = ErrorCode.Success;
+            else
+                result.Status = ErrorCode.SomethingWentWrong;
+            return result;
+        }
+
+        [Authorize]
         [HttpGet("GetByID")]
         public ApiResultWithData<Customer> GetByID(int customerID)
         {
-            var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Customer> result = new ApiResultWithData<Customer>();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-
-                CustomerData customerData = new CustomerData();
-                var data = customerData.GetByID(customerID);
-                result.Data = data;
-                result.Status = ErrorCode.Success;
-
-            }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
+            CustomerData customerData = new CustomerData();
+            var data = customerData.GetByID(customerID);
+            result.Data = data;
+            result.Status = ErrorCode.Success;
 
             return result;
         }
+
         private ApiResultWithData<RecordResponse> ValidateCustomer(Customer customer, bool isUpdate = false)
         {
             // Validate basic required information is provided.

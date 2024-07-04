@@ -24,6 +24,7 @@ namespace OMSv2.Service
                     {
                         var item = new Item();
                         item.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
+                        item.Code = SafeParser.ParseString(dataReader["Code"]);
                         item.Name = SafeParser.ParseString(dataReader["Name"]);
                         item.Description = SafeParser.ParseString(dataReader["Description"]);
                         item.Price = SafeParser.ParseDouble(dataReader["Price"]);
@@ -51,6 +52,7 @@ namespace OMSv2.Service
                 //database.AddInParameter(command, "ItemID", DbType.Guid, item.ItemID);
                 database.AddInParameter(command, "ClientID", DbType.Guid, item.ClientID);
                 database.AddInParameter(command, "Name", DbType.String, item.Name);
+                database.AddInParameter(command, "Code", DbType.String, item.Code);
                 database.AddInParameter(command, "Description", DbType.String, item.Description);
                 database.AddInParameter(command, "Price", DbType.Double, item.Price);
                 database.AddInParameter(command, "ImgURL", DbType.String, item.ImgURL);
@@ -64,6 +66,23 @@ namespace OMSv2.Service
                 return new Result();
             }
         }
+        public bool CheckItemCodeExists(Guid clientID, string code)
+        {
+            var database = DbHandler.GetDatabase();
+            bool isExist = false;
+            using (var command = database.GetStoredProcCommand("CheckItemCodeExists"))
+            {
+                database.AddInParameter(command, "ClientID", DbType.Guid, clientID);
+                database.AddInParameter(command, "Code", DbType.String, code);
+
+                var outValue = database.ExecuteScalar(command);
+                if (outValue != null && outValue != DBNull.Value)
+                {
+                    isExist = Convert.ToInt32(outValue) == 1;
+                }
+                return isExist;
+            }
+        }
 
         public Result Update(Item item)
         {
@@ -72,6 +91,7 @@ namespace OMSv2.Service
             {
                 database.AddInParameter(command, "ItemID", DbType.Int32, item.ItemID);
                 database.AddInParameter(command, "Name", DbType.String, item.Name);
+                database.AddInParameter(command, "Code", DbType.String, item.Code);
                 database.AddInParameter(command, "Description", DbType.String, item.Description);
                 database.AddInParameter(command, "Price", DbType.Double, item.Price);
                 database.AddInParameter(command, "ImgURL", DbType.String, item.ImgURL);
@@ -112,6 +132,7 @@ namespace OMSv2.Service
                     {
                         item.ItemID = SafeParser.ParseInteger(dataReader["ItemID"]);
                         item.Name = SafeParser.ParseString(dataReader["Name"]);
+                        item.Code = SafeParser.ParseString(dataReader["Code"]);
                         item.Description = SafeParser.ParseString(dataReader["Description"]);
                         item.Price = SafeParser.ParseDouble(dataReader["Price"]);
                         item.ImgURL = SafeParser.ParseString(dataReader["ImgURL"]);
@@ -129,7 +150,7 @@ namespace OMSv2.Service
             }
         }
 
-        
+
     }
 }
 

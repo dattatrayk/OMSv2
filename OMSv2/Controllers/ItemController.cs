@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMSv2.Service.Entity;
 using OMSv2.Service.Helpers;
@@ -12,47 +13,36 @@ namespace OMSv2.Service.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        // GET: api/Item
+        [Authorize]
         [HttpPost]
         public ApiResultWithData<List<Item>> Get(ItemFilterParameter parameter)
         {
             ApiResultWithData<List<Item>> result = new ApiResultWithData<List<Item>>();
 
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString();
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-                ItemData itemData = new ItemData();
-                var items = itemData.GetAll(parameter);
-                if (parameter.MinPrice != 0)
-                    items = items.Where(x => x.Price >= parameter.MinPrice).ToList();
-                if (parameter.MaxPrice != 0)
-                    items = items.Where(x => x.Price <= parameter.MaxPrice).ToList();
-                if (parameter.IsInStock)
-                    items = items.Where(x => x.Stock > 0).ToList();
-                if (!parameter.IsInStock)
-                    items = items.Where(x => x.Stock <= 0).ToList();
-                result.Data = items;
-                result.Status = ErrorCode.Success;
-            }
-            else
-                result.Status = ErrorCode.InvalidOrEmptyID;
-
+            ItemData itemData = new ItemData();
+            var items = itemData.GetAll(parameter);
+            if (parameter.MinPrice != 0)
+                items = items.Where(x => x.Price >= parameter.MinPrice).ToList();
+            if (parameter.MaxPrice != 0)
+                items = items.Where(x => x.Price <= parameter.MaxPrice).ToList();
+            if (parameter.IsInStock)
+                items = items.Where(x => x.Stock > 0).ToList();
+            if (!parameter.IsInStock)
+                items = items.Where(x => x.Stock <= 0).ToList();
+            result.Data = items;
+            result.Status = ErrorCode.Success;
             return result;
         }
 
-        // POST: api/Item
-        [HttpPost("Create")]
-        public ApiResultWithData<RecordResponse> Post([FromBody]List<Item> items)
+        [HttpPost("Insert")]
+        public ApiResultWithData<RecordResponse> Insert([FromBody]List<Item> items)
         {
             var result = new ApiResultWithData<RecordResponse>();
             var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
+            var apiKey = apiKeyHelper.GetApiKey(Request);
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
+            if (apiKeyHelper.IsValidAPI(apiKey))
             {
-
                 ItemData itemData = new ItemData();
                 var omsResult = new Result();
                 foreach (var item in items)
@@ -60,7 +50,9 @@ namespace OMSv2.Service.Controllers
                     result = ValidateItem(item);
                     if (result.Status == ErrorCode.Success)
                     {
-                        omsResult = itemData.Insert(item);
+                        bool isValid = itemData.CheckItemCodeExists(item.ClientID, item.Code);
+                        if (isValid)
+                            omsResult = itemData.Insert(item);
                     }
                 }
 
@@ -73,83 +65,88 @@ namespace OMSv2.Service.Controllers
                     result.Status = ErrorCode.SomethingWentWrong;
             }
 
-
-
             else
                 result.Status = apiKeyHelper.ErrorCode;
 
             return result;
         }
 
-        [HttpPost("Update")]
-        public Models.ApiResult Update(Item item)
+        [Authorize]
+        [HttpPost("Create")]
+        public ApiResultWithData<RecordResponse> Post([FromBody]List<Item> items)
         {
-            Models.ApiResult result = new Models.ApiResult();
+            var result = new ApiResultWithData<RecordResponse>();
 
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
-
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
+            ItemData itemData = new ItemData();
+            var omsResult = new Result();
+            foreach (var item in items)
             {
-                result = ValidateItem(item, true);
+                result = ValidateItem(item);
                 if (result.Status == ErrorCode.Success)
                 {
-                    ItemData itemData = new ItemData();
-                    var OMSResult = itemData.Update(item);
-                    if (OMSResult.IsValid)
-                        result.Status = ErrorCode.Success;
-                    else
-                        result.Status = ErrorCode.SomethingWentWrong;
+                    omsResult = itemData.Insert(item);
                 }
+            }
 
+            if (omsResult.IsValid)
+            {
+                result.Status = ErrorCode.Success;
+                result.Data = new RecordResponse { Id = omsResult.ID };
             }
             else
-                result.Status = apiKeyHelper.ErrorCode;
+                result.Status = ErrorCode.SomethingWentWrong;
+
             return result;
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpPost("DeleteByID")]
-        public Models.ApiResult Delete(int itemID)
+        [Authorize]
+        [HttpPost("Update")]
+        public ApiResult Update(Item item)
         {
-            Models.ApiResult result = new Models.ApiResult();
-            var apiKeyHelper = new ApiKeyHelper();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
+            ApiResult result = new ApiResult();
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
+            result = ValidateItem(item, true);
+            if (result.Status == ErrorCode.Success)
             {
                 ItemData itemData = new ItemData();
-                var OMSResult = itemData.Delete(itemID, Guid.Empty);
+                var OMSResult = itemData.Update(item);
                 if (OMSResult.IsValid)
                     result.Status = ErrorCode.Success;
                 else
                     result.Status = ErrorCode.SomethingWentWrong;
             }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
             return result;
         }
+
+        [Authorize]
+        [HttpPost("DeleteByID")]
+        public ApiResult Delete(int itemID)
+        {
+            ApiResult result = new ApiResult();
+
+            ItemData itemData = new ItemData();
+            var OMSResult = itemData.Delete(itemID, Guid.Empty);
+            if (OMSResult.IsValid)
+                result.Status = ErrorCode.Success;
+            else
+                result.Status = ErrorCode.SomethingWentWrong;
+            return result;
+        }
+
+        [Authorize]
         [HttpPost("GetByID")]
         public ApiResultWithData<Item> GetByID(int itemID)
         {
-            var apiKeyHelper = new ApiKeyHelper();
             ApiResultWithData<Item> result = new ApiResultWithData<Item>();
-            var apiKey = Request.Headers["ApiKey"].ToString(); //apiKeyHelper.GetApiKey(requestMessage);
 
-            if (apiKeyHelper.IsValidAPIKey(apiKey))
-            {
-
-                ItemData itemData = new ItemData();
-                var data = itemData.GetByID(itemID);
-                result.Data = data;
-                result.Status = ErrorCode.Success;
-
-            }
-            else
-                result.Status = apiKeyHelper.ErrorCode;
+            ItemData itemData = new ItemData();
+            var data = itemData.GetByID(itemID);
+            result.Data = data;
+            result.Status = ErrorCode.Success;
 
             return result;
         }
+
         private ApiResultWithData<RecordResponse> ValidateItem(Item item, bool isUpdate = false)
         {
             // Validate basic required information is provided.

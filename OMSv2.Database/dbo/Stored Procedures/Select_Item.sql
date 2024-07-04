@@ -10,6 +10,7 @@ BEGIN
 	     i.ItemID,
 	     i.ClientID,
 		 i.Name,
+		 i.Code,
 		 i.Description,
 		 i.Price,
 		 i.ImgURL,

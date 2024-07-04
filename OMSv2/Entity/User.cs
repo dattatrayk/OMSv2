@@ -11,10 +11,12 @@ namespace OMSv2.Service.Entity
         public Guid ClientID { get; set; }
         public string SessionToken { get; set; }
     }
-    public class LoginRequest
+    public class Login
     {
         public string Username { get; set; }
         public string Password { get; set; }
     }
-
+    public class Register : Login
+    {
+    }
 }

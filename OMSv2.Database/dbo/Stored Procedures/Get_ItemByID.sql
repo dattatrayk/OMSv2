@@ -5,6 +5,7 @@ BEGIN
       SELECT 
 		i.ItemID,
 		i.Name,
+		i.Code,
 		i.Description,
 		i.Price,
 		i.ImgURL,
